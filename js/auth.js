@@ -2,6 +2,29 @@
    NEXINC — AUTH LOGIC
    ============================================================ */
 
+// Global scope - needed for Google SDK onload callback
+function handleGoogleLoginGlobal(response) {
+  window._pendingGoogleResponse = response;
+  const event = new CustomEvent('google-login', { detail: response });
+  window.dispatchEvent(event);
+}
+
+window.initGoogle = function () {
+  const btn = document.getElementById('googleButtonContainer');
+  if (!btn) return;
+  if (window.google) {
+    google.accounts.id.initialize({
+      client_id: '428240791571-o7vohrjlnbctiu3k0ap60cpb19psvg3u.apps.googleusercontent.com',
+      callback: handleGoogleLoginGlobal
+    });
+    google.accounts.id.renderButton(btn, {
+      theme: 'outline', size: 'large', width: 340,
+      shape: 'rectangular', logo_alignment: 'center'
+    });
+  }
+};
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const formTitle = document.getElementById('formTitle');
     const formSub = document.getElementById('formSub');
@@ -94,19 +117,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initialize Google Sign-In
-    window.onload = function () {
-        if (window.google) {
-            google.accounts.id.initialize({
-                client_id: '428240791571-o7vohrjlnbctiu3k0ap60cpb19psvg3u.apps.googleusercontent.com',
-                callback: handleGoogleLogin
-            });
-            google.accounts.id.renderButton(
-                document.getElementById('googleButtonContainer'),
-                { theme: 'outline', size: 'large', width: 340, shape: 'rectangular', logo_alignment: 'center' }
-            );
-        }
-    };
+    // Initialize Google Sign-In - call in case SDK already loaded before this
+    if (window.google) {
+        window.initGoogle();
+    }
+
+    // Listen for Google login events dispatched by global handler
+    window.addEventListener('google-login', async (e) => {
+        await handleGoogleLogin(e.detail);
+    });
+
+    // Also handle any pending response from before DOMContentLoaded
+    if (window._pendingGoogleResponse) {
+        handleGoogleLogin(window._pendingGoogleResponse);
+        window._pendingGoogleResponse = null;
+    }
 
     async function handleGoogleLogin(response) {
         try {

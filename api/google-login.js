@@ -8,7 +8,7 @@ const pool = new Pool({
 
 const googleClient = new OAuth2Client('428240791571-o7vohrjlnbctiu3k0ap60cpb19psvg3u.apps.googleusercontent.com');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }

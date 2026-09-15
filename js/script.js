@@ -13,7 +13,7 @@ const dot = $('.cur-dot'), ring = $('.cur-ring');
 let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my;
 if (fine){
   document.body.classList.add('cursor-on');
-  addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.opacity = 1; ring.style.opacity = 1; });
   document.addEventListener('mouseover', e => {
     ring.classList.toggle('big', !!e.target.closest('a,button,.tile,.tm-chip,.tm-mini'));
   });
