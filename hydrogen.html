@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexInc · Hydrogen Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/lab.css">
+<style>
+/* ---------- header ---------- */
+.site-head{
+  position:fixed;top:0;left:0;right:0;z-index:50;height:62px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 26px;background:var(--head-bg);backdrop-filter:blur(10px);
+  border-bottom:1.5px solid var(--line);
+  animation:headIn .8s var(--ease) both;
+}
+@keyframes headIn{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink)}
+.brand .bname{font-family:'Fraunces',serif;font-weight:700;font-size:20px;letter-spacing:-.01em}
+.brand .bname em{font-style:italic;color:var(--verm)}
+.nav-link{font-size:11px;letter-spacing:.2em;position:relative;padding:4px 2px}
+.nav-link::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1.5px;background:var(--verm);transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease)}
+.nav-link:hover::after{transform:scaleX(1);transform-origin:left}
+.head-right{display:flex;align-items:center;gap:14px}
+.head-tag{font-size:10px;letter-spacing:.18em;color:var(--ink-soft)}
+.theme-btn{
+  position:relative;width:38px;height:38px;border:1.5px solid var(--ink);border-radius:50%;
+  background:var(--card);display:grid;place-items:center;color:var(--ink);
+  transition:transform .3s var(--ease),background-color .45s var(--ease);
+}
+.theme-btn:hover{transform:rotate(24deg) scale(1.08)}
+.theme-btn svg{position:absolute;width:17px;height:17px;transition:transform .5s var(--spring),opacity .3s}
+html[data-theme="light"] .ic-moon{opacity:0;transform:rotate(-90deg) scale(0)}
+html[data-theme="dark"] .ic-sun{opacity:0;transform:rotate(90deg) scale(0)}
+@media(max-width:640px){.head-tag{display:none}}
+
+
+
+/* ============================================================
+   NEXINC — LANDING v6
+   Same-size tiles · hover content auto-fit (2 / 4-6 / 10 chips)
+   ============================================================ */
+:root{
+  --paper:#F6F1E7; --paper2:#FCF9F2; --card:#FFFDF8;
+  --ink:#1E2420; --ink-soft:#5A625B;
+  --line:rgba(30,36,32,.16); --grid:rgba(30,36,32,.055);
+  --shadow:rgba(30,36,32,.10);
+  --head-bg:rgba(246,241,231,.82);
+  --sb:#CFC5AE;
+  --frost:rgba(255,253,248,.62);
+  --chipbg:rgba(255,255,255,.78);
+  --blue:#4A6FA5;
+  --green:#2E7D52; --verm:#C94F2E; --teal:#0E7C86; --amber:#A06B12;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+html[data-theme="dark"]{
+  --paper:#14110B; --paper2:#1A160F; --card:#211C13;
+  --ink:#EFE8D8; --ink-soft:#A69F8C;
+  --line:rgba(239,232,216,.15); --grid:rgba(239,232,216,.05);
+  --shadow:rgba(0,0,0,.45);
+  --head-bg:rgba(20,17,11,.8);
+  --sb:#3E382A;
+  --frost:rgba(33,28,19,.62);
+  --chipbg:rgba(43,37,26,.78);
+  --blue:#6FA3DC;
+  --green:#4CBF8B; --verm:#E8794F; --teal:#35B5C2; --amber:#E0AC4F;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Space Grotesk',sans-serif;color:var(--ink);
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:38px 38px;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+html.theming, html.theming *{
+  transition:background-color .45s var(--ease),color .45s var(--ease),
+    border-color .45s var(--ease),box-shadow .45s var(--ease) !important;
+}
+::selection{background:var(--verm);color:var(--paper2)}
+::-webkit-scrollbar{width:11px}
+::-webkit-scrollbar-track{background:var(--paper)}
+::-webkit-scrollbar-thumb{background:var(--sb);border:3px solid var(--paper);border-radius:8px}
+.mono{font-family:'JetBrains Mono',monospace}
+h1,h2,h3,.tname,.gsym{font-family:'Fraunces',serif}
+button{font-family:inherit;color:inherit;cursor:pointer;background:none;border:none}
+a{color:inherit;text-decoration:none}
+svg{display:block}
+
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+header,main,footer{position:relative;z-index:2}
+
+
+  /* Custom Hero for Hydrogen Page */
+  .hydro-hero {
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 20px 40px;
+    position: relative;
+    z-index: 10;
+  }
+  
+  .hero-tagline {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--ink-soft);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .hero-tagline::before, .hero-tagline::after {
+    content: "";
+    width: 40px;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .huge-h-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 20px;
+  }
+
+  .huge-h {
+    font-family: 'Fraunces', serif;
+    font-size: 140px;
+    color: var(--ink);
+    line-height: 1;
+    z-index: 2;
+  }
+
+  /* Orbits */
+  .orbit {
+    position: absolute;
+    border: 1px solid var(--ink-soft);
+    border-radius: 50%;
+    opacity: 0.3;
+  }
+  .orbit-1 { width: 140px; height: 180px; transform: rotate(-30deg); }
+  .orbit-2 { width: 180px; height: 140px; transform: rotate(45deg); }
+  
+  .electron {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--blue);
+    border-radius: 50%;
+    top: 10%;
+    right: 15%;
+  }
+
+  .hero-headline {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--ink);
+    max-width: 800px;
+    margin-bottom: 24px;
+  }
+
+  .pill-word {
+    display: inline-block;
+    padding: 0 16px;
+    border: 2px solid var(--verm);
+    border-radius: 100px;
+    color: var(--blue);
+    font-style: italic;
+    transform: rotate(-4deg);
+    margin: 0 8px;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 600px;
+    margin-bottom: 40px;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+  }
+
+  .btn-pill {
+    padding: 12px 24px;
+    border: 1.5px solid var(--ink);
+    border-radius: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    background: transparent;
+    transition: 0.3s;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .btn-pill:hover { background: var(--ink); color: var(--paper); }
+  
+  </style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div class="cur-dot"></div>
+<div class="cur-ring"></div>
+
+<!-- HEADER -->
+<header class="site-head">
+  <a class="brand" href="dashboard.html" aria-label="NexInc home">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <path d="M14 2 L24.5 8 V20 L14 26 L3.5 20 V8 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M9.5 18.5 V9.5 L18.5 18.5 V9.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="21.5" cy="6.5" r="2.4" style="fill:var(--verm)"/>
+    </svg>
+    <span class="bname">Nex<em>Inc</em></span>
+  </a>
+  <nav style="display: flex; align-items: center; gap: 20px;">
+    <a href="dashboard.html" class="mono nav-link">← ALL SECTIONS</a>
+    <button class="theme-btn" id="themeBtn" aria-label="Theme badlo">
+      <i class="ic-sun" data-lucide="sun"></i>
+      <i class="ic-moon" data-lucide="moon"></i>
+    </button>
+  </nav>
+  <div class="head-right">
+    <span class="mono head-tag">HYDROGEN · VISUAL LAB</span>
+    <!-- User Profile Dropdown / Button -->
+    <div class="user-profile-nav" id="userProfileBtn" title="Profile">
+      <div class="user-avatar" id="navAvatar">U</div>
+      <span class="user-name-label" id="navName">User</span>
+    </div>
+  </div>
+</header>
+
+<!-- HERO SECTION -->
+<main class="hydro-hero">
+  <div class="hero-tagline mono">NEXINC · INORGANIC · ELEMENT NO. 1 · HYDROGEN</div>
+  
+  <div class="huge-h-container">
+    <div class="orbit orbit-1"></div>
+    <div class="orbit orbit-2"><div class="electron"></div></div>
+    <div class="huge-h">H</div>
+  </div>
+
+  <h1 class="hero-headline">Sirf ek electron,<br><span class="pill-word">par</span> poori chemistry.</h1>
+  
+  <p class="hero-sub">Side se H · D · T select karo — display me atom ka visual banega. <b>2D / 3D toggle</b> se shell ka 3D shape ghumao. Compound bhi select kar sakte ho. <b>Sirf visuals.</b></p>
+  
+  <div class="hero-btns">
+    <a href="#workspace" class="btn-pill">VISUAL LAB KHOLO ↓</a>
+    <a href="dashboard.html" class="btn-pill">← WAPIS LANDING</a>
+  </div>
+</main>
+
+<!-- WORKSPACE AREA -->
+<section id="workspace" class="workspace-area">
+  <h2 class="ws-title">Hydrogen Visual Lab</h2>
+  
+  <div class="lab-wrapper" id="labWrapper">
+    <button class="fs-close-btn" id="btnFSClose" aria-label="Close Fullscreen"><i data-lucide="x"></i></button>
+    <!-- Left Sidebar -->
+    <div class="compounds-sidebar">
+      <div class="comp-item" data-comp="H2">
+        <div class="comp-item-sym">H₂</div>
+        <div class="comp-item-name">DIHYDROGEN</div>
+      </div>
+      <div class="comp-item active" data-comp="H2O">
+        <div class="comp-item-sym">H₂O</div>
+        <div class="comp-item-name">WATER</div>
+      </div>
+      <div class="comp-item" data-comp="D2O">
+        <div class="comp-item-sym">D₂O</div>
+        <div class="comp-item-name">HEAVY WATER</div>
+      </div>
+      <div class="comp-item" data-comp="H2O2">
+        <div class="comp-item-sym">H₂O₂</div>
+        <div class="comp-item-name">PEROXIDE</div>
+      </div>
+      <div class="comp-item" data-comp="LiH">
+        <div class="comp-item-sym">LiH</div>
+        <div class="comp-item-name">LITHIUM HYDRIDE</div>
+      </div>
+      <div class="comp-item" data-comp="NaH">
+        <div class="comp-item-sym">NaH</div>
+        <div class="comp-item-name">SODIUM HYDRIDE</div>
+      </div>
+      <div class="comp-item" data-comp="CaH2">
+        <div class="comp-item-sym">CaH₂</div>
+        <div class="comp-item-name">CALCIUM HYDRIDE</div>
+      </div>
+      <div class="comp-item" data-comp="MgH2">
+        <div class="comp-item-sym">MgH₂</div>
+        <div class="comp-item-name">MAGNESIUM HYDRIDE</div>
+      </div>
+      <div class="comp-item" data-comp="CH4">
+        <div class="comp-item-sym">CH₄</div>
+        <div class="comp-item-name">METHANE</div>
+      </div>
+      <div class="comp-item" data-comp="NH3">
+        <div class="comp-item-sym">NH₃</div>
+        <div class="comp-item-name">AMMONIA</div>
+      </div>
+      <div class="comp-item" data-comp="HF">
+        <div class="comp-item-sym">HF</div>
+        <div class="comp-item-name">HYDROGEN FLUORIDE</div>
+      </div>
+      <div class="comp-item" data-comp="B2H6">
+        <div class="comp-item-sym">B₂H₆</div>
+        <div class="comp-item-name">DIBORANE</div>
+      </div>
+      <div class="comp-item" data-comp="H3O+">
+        <div class="comp-item-sym">H₃O⁺</div>
+        <div class="comp-item-name">HYDRONIUM</div>
+      </div>
+      <div class="comp-item" data-comp="OH-">
+        <div class="comp-item-sym">OH⁻</div>
+        <div class="comp-item-name">HYDROXIDE</div>
+      </div>
+      <div class="comp-item" data-comp="C2H4">
+        <div class="comp-item-sym">C₂H₄</div>
+        <div class="comp-item-name">ETHENE</div>
+      </div>
+      <div class="comp-item" data-comp="C2H2">
+        <div class="comp-item-sym">C₂H₂</div>
+        <div class="comp-item-name">ETHYNE</div>
+      </div>
+      <div class="comp-item" data-comp="CH3OH">
+        <div class="comp-item-sym">CH₃OH</div>
+        <div class="comp-item-name">METHANOL</div>
+      </div>
+      <div class="comp-item" data-comp="C2H5OH">
+        <div class="comp-item-sym">C₂H₅OH</div>
+        <div class="comp-item-name">ETHANOL</div>
+      </div>
+      <div class="comp-item" data-comp="C3H8">
+        <div class="comp-item-sym">C₃H₈</div>
+        <div class="comp-item-name">PROPANE</div>
+      </div>
+      <div class="comp-item" data-comp="CO">
+        <div class="comp-item-sym">CO</div>
+        <div class="comp-item-name">CARBON MONOXIDE</div>
+      </div>
+      <div class="comp-item" data-comp="CO2">
+        <div class="comp-item-sym">CO₂</div>
+        <div class="comp-item-name">CARBON DIOXIDE</div>
+      </div>
+    </div>
+
+    <!-- Main Stage -->
+    <div class="visual-stage">
+      <div class="lab-toolbar">
+        <div class="toolbar-left">
+          <button class="lab-btn active" id="btn2D3D"><i data-lucide="cuboid"></i> 3D MODE</button>
+          <button class="lab-btn" id="btnAngle"><i data-lucide="spline"></i> ANGLE</button>
+          <button class="lab-btn" id="btnLP"><i data-lucide="cloud-fog"></i> LONE PAIR</button>
+        </div>
+        <div class="toolbar-right">
+          <button class="lab-btn" id="btnFS"><i data-lucide="maximize"></i> FULL SCREEN</button>
+        </div>
+      </div>
+      
+      <div class="render-area" id="renderArea">
+        <!-- Molecule renders here -->
+      </div>
+    </div>
+
+    <!-- Right Info Sidebar -->
+    <div class="info-sidebar">
+      <h3 class="info-head" id="infoSym">H₂O</h3>
+      
+      <div class="info-group">
+        <label>HYBRIDIZATION</label>
+        <div class="info-val" id="infoHybrid">sp³</div>
+      </div>
+      
+      <div class="info-group">
+        <label>GEOMETRY</label>
+        <div class="info-val" id="infoGeom">Bent / V-shaped</div>
+      </div>
+      
+      <div class="info-group">
+        <label>STRUCTURE</label>
+        <div class="info-val" id="infoStruct">Covalent (Polar)</div>
+      </div>
+      
+      <div class="info-group">
+        <label>QUICK FACTS</label>
+        <div class="info-val" id="infoDesc" style="font-size: 13px; color: var(--ink-soft);">Universal solvent with strong intermolecular hydrogen bonding.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  if (window.lucide) lucide.createIcons();
+  
+  // Theme Toggle
+  const themeBtn = document.getElementById('themeBtn');
+  themeBtn.addEventListener('click', () => {
+    document.documentElement.classList.add('theming');
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    document.documentElement.dataset.theme = isDark ? 'light' : 'dark';
+    localStorage.setItem('nexinc-theme', isDark ? 'light' : 'dark');
+    setTimeout(() => document.documentElement.classList.remove('theming'), 500);
+  });
+</script>
+<script src="js/script.js"></script>
+
+<script src="js/dashboard.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/lab.js"></script>
+</body>
+</html>

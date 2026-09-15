@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexInc · Login</title>
+
+<!-- Fonts: Fraunces (display) + Space Grotesk (body) + JetBrains Mono (labels) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div class="cur-dot"></div>
+<div class="cur-ring"></div>
+
+<main class="auth-wrapper">
+    <div class="auth-panel">
+        
+        <!-- Left Panel: Website details -->
+        <div class="auth-info">
+            <div class="auth-info-content">
+                <a class="brand" href="#" aria-label="NexInc home">
+                    <svg width="34" height="34" viewBox="0 0 28 28" fill="none">
+                      <path d="M14 2 L24.5 8 V20 L14 26 L3.5 20 V8 Z" stroke="#1E2420" stroke-width="2" stroke-linejoin="round"/>
+                      <path d="M9.5 18.5 V9.5 L18.5 18.5 V9.5" stroke="#1E2420" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <circle cx="21.5" cy="6.5" r="2.4" fill="#C94F2E"/>
+                    </svg>
+                    <span class="bname" style="font-size:24px;">Nex<em>Inc</em></span>
+                </a>
+                
+                <h1 class="auth-headline">Explore the<br><em>Visual</em> Chemistry</h1>
+                <p class="auth-desc">Hum chemistry ke sabhi important compounds ke visuals aur unki deep details provide kar rahe hain. Live chemistry bench ka anubhav lene ke liye judiye hamare saath.</p>
+                
+                <div class="auth-features">
+                    <div class="auth-feature">
+                        <i data-lucide="flask-conical"></i>
+                        <span>Interactive Elements</span>
+                    </div>
+                    <div class="auth-feature">
+                        <i data-lucide="microscope"></i>
+                        <span>Visual Frameworks</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Login / Sign Up Form -->
+        <div class="auth-form-box">
+            <div class="auth-form-inner">
+                <h2 class="form-title" id="formTitle">Welcome Back</h2>
+                <p class="form-sub mono" id="formSub">SIGN IN TO CONTINUE</p>
+
+                <!-- Google Login Container -->
+                <div id="googleButtonContainer" style="display: flex; justify-content: center; margin-bottom: 12px;"></div>
+
+                <div class="divider"><span class="mono">OR</span></div>
+
+                <form id="authForm" action="dashboard.html">
+                    <div class="input-group" id="nameGroup" style="display: none; opacity: 0;">
+                        <label class="mono" for="nameInput">FULL NAME</label>
+                        <input type="text" id="nameInput" placeholder="Dr. Homi Bhabha">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="mono" for="emailInput">EMAIL ADDRESS</label>
+                        <input type="email" id="emailInput" placeholder="atom@nexinc.com" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="mono" for="passInput">PASSWORD</label>
+                        <input type="password" id="passInput" placeholder="••••••••" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn mono" id="submitBtn">
+                        SIGN IN <i data-lucide="arrow-right"></i>
+                    </button>
+                </form>
+
+                <div class="switch-mode">
+                    <span id="switchText">Don't have an account?</span> 
+                    <button id="switchBtn" class="mono">SIGN UP</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</main>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="load-line">
+        <div class="load-text">Nex<em>Inc</em></div>
+    </div>
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="js/script.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

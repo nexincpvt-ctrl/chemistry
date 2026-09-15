@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexInc · Interactive JEE Chemistry</title>
+
+<script>try{if(localStorage.getItem('nexinc-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   NEXINC — LANDING v6
+   Same-size tiles · hover content auto-fit (2 / 4-6 / 10 chips)
+   ============================================================ */
+:root{
+  --paper:#F6F1E7; --paper2:#FCF9F2; --card:#FFFDF8;
+  --ink:#1E2420; --ink-soft:#5A625B;
+  --line:rgba(30,36,32,.16); --grid:rgba(30,36,32,.055);
+  --shadow:rgba(30,36,32,.10);
+  --head-bg:rgba(246,241,231,.82);
+  --sb:#CFC5AE;
+  --frost:rgba(255,253,248,.62);
+  --chipbg:rgba(255,255,255,.78);
+  --blue:#4A6FA5;
+  --green:#2E7D52; --verm:#C94F2E; --teal:#0E7C86; --amber:#A06B12;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+html[data-theme="dark"]{
+  --paper:#14110B; --paper2:#1A160F; --card:#211C13;
+  --ink:#EFE8D8; --ink-soft:#A69F8C;
+  --line:rgba(239,232,216,.15); --grid:rgba(239,232,216,.05);
+  --shadow:rgba(0,0,0,.45);
+  --head-bg:rgba(20,17,11,.8);
+  --sb:#3E382A;
+  --frost:rgba(33,28,19,.62);
+  --chipbg:rgba(43,37,26,.78);
+  --blue:#6FA3DC;
+  --green:#4CBF8B; --verm:#E8794F; --teal:#35B5C2; --amber:#E0AC4F;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Space Grotesk',sans-serif;color:var(--ink);
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:38px 38px;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+html.theming, html.theming *{
+  transition:background-color .45s var(--ease),color .45s var(--ease),
+    border-color .45s var(--ease),box-shadow .45s var(--ease) !important;
+}
+::selection{background:var(--verm);color:var(--paper2)}
+::-webkit-scrollbar{width:11px}
+::-webkit-scrollbar-track{background:var(--paper)}
+::-webkit-scrollbar-thumb{background:var(--sb);border:3px solid var(--paper);border-radius:8px}
+.mono{font-family:'JetBrains Mono',monospace}
+h1,h2,h3,.tname,.gsym{font-family:'Fraunces',serif}
+button{font-family:inherit;color:inherit;cursor:pointer;background:none;border:none}
+a{color:inherit;text-decoration:none}
+svg{display:block}
+
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+header,main,footer{position:relative;z-index:2}
+
+/* ---------- cursor ---------- */
+.cur-dot,.cur-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:300;border-radius:50%;opacity:0;transition:opacity .3s}
+.cur-dot{width:7px;height:7px;background:var(--ink);transform:translate(-50%,-50%)}
+.cur-ring{width:34px;height:34px;border:1.5px solid color-mix(in srgb,var(--ink) 45%,transparent);transform:translate(-50%,-50%);transition:width .25s var(--ease),height .25s var(--ease),opacity .3s,background .25s}
+.cur-ring.big{width:56px;height:56px;background:color-mix(in srgb,var(--ink) 7%,transparent)}
+@media (hover:hover) and (pointer:fine){
+  body.cursor-on{cursor:none}
+  body.cursor-on a,body.cursor-on button,body.cursor-on .tile{cursor:none}
+  body.cursor-on .cur-dot,body.cursor-on .cur-ring{opacity:1}
+}
+
+/* ---------- header ---------- */
+.site-head{
+  position:fixed;top:0;left:0;right:0;z-index:50;height:62px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 26px;background:var(--head-bg);backdrop-filter:blur(10px);
+  border-bottom:1.5px solid var(--line);
+  animation:headIn .8s var(--ease) both;
+}
+@keyframes headIn{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink)}
+.brand .bname{font-family:'Fraunces',serif;font-weight:700;font-size:20px;letter-spacing:-.01em}
+.brand .bname em{font-style:italic;color:var(--verm)}
+.nav-link{font-size:11px;letter-spacing:.2em;position:relative;padding:4px 2px}
+.nav-link::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1.5px;background:var(--verm);transform:scaleX(0);transform-origin:right;transition:transform .35s var(--ease)}
+.nav-link:hover::after{transform:scaleX(1);transform-origin:left}
+.head-right{display:flex;align-items:center;gap:14px}
+.head-tag{font-size:10px;letter-spacing:.18em;color:var(--ink-soft)}
+.theme-btn{
+  position:relative;width:38px;height:38px;border:1.5px solid var(--ink);border-radius:50%;
+  background:var(--card);display:grid;place-items:center;color:var(--ink);
+  transition:transform .3s var(--ease),background-color .45s var(--ease);
+}
+.theme-btn:hover{transform:rotate(24deg) scale(1.08)}
+.theme-btn svg{position:absolute;width:17px;height:17px;transition:transform .5s var(--spring),opacity .3s}
+html[data-theme="light"] .ic-moon{opacity:0;transform:rotate(-90deg) scale(0)}
+html[data-theme="dark"] .ic-sun{opacity:0;transform:rotate(90deg) scale(0)}
+@media(max-width:640px){.head-tag{display:none}}
+
+/* ---------- hero ---------- */
+.hero{min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:130px 22px 60px}
+.overline{font-size:11px;letter-spacing:.24em;color:var(--ink-soft);display:flex;align-items:center;gap:16px;animation:fadeUp .7s var(--ease) .15s both}
+.overline::before,.overline::after{content:"";width:44px;height:1.5px;background:var(--line)}
+.hero-h{margin-top:26px;font-size:clamp(2.6rem,8vw,6.2rem);font-weight:560;line-height:1.04;letter-spacing:-.025em}
+.hero-h .line{display:block;overflow:hidden;padding:.04em 0}
+.hero-h .w{display:inline-block;transform:translateY(120%);animation:rise .85s var(--ease) var(--d,0s) forwards}
+@keyframes rise{to{transform:translateY(0)}}
+.circled{position:relative;font-style:italic;padding:0 .08em}
+.circled svg{position:absolute;inset:-14% -7%;width:114%;height:128%;overflow:visible;pointer-events:none}
+.circled path{fill:none;stroke:var(--verm);stroke-width:3.4;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1;animation:circDraw .8s cubic-bezier(.5,0,.3,1) 1.15s forwards}
+@keyframes circDraw{to{stroke-dashoffset:0}}
+.hero-sub{margin-top:26px;max-width:640px;font-size:16px;line-height:1.65;color:var(--ink-soft);animation:fadeUp .7s var(--ease) .85s both}
+.hero-sub b{color:var(--ink)}
+.hint{margin-top:44px;display:inline-flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.2em;color:var(--ink);border:1.5px solid var(--ink);border-radius:999px;padding:11px 20px;background:var(--card);transition:.3s var(--ease);animation:fadeUp .7s var(--ease) 1.05s both}
+.hint:hover{background:var(--ink);color:var(--paper2);transform:translateY(-3px)}
+.hint svg{width:14px;height:14px;animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(4px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{50%{transform:scale(1.5);opacity:.5}}
+
+/* ---------- marquee ---------- */
+.marquee{overflow:hidden;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);background:var(--paper2);padding:13px 0}
+.mtrack{display:flex;width:max-content;animation:mq 30s linear infinite}
+.marquee.rev .mtrack{animation-direction:reverse}
+.mgroup{display:flex;align-items:center;gap:2.6rem;padding:0 1.3rem}
+.mgroup span{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;white-space:nowrap}
+.dm{width:8px;height:8px;flex:none;transform:rotate(45deg)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- sections ---------- */
+.sec{padding:110px 0 40px}
+.bench-kick{text-align:center;font-size:11px;letter-spacing:.26em;color:var(--ink-soft);margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:18px}
+.bench-kick::before,.bench-kick::after{content:"";width:64px;height:1.5px;background:var(--line)}
+.bench-sub{text-align:center;font-size:10.5px;letter-spacing:.16em;color:var(--ink-soft);margin-bottom:60px}
+.bench-sub b{color:var(--verm)}
+.tiles-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:52px 50px;max-width:980px;margin:0 auto;padding:0 26px}
+
+/* ---------- TILE — fixed same size ---------- */
+.tile{
+  --tc:var(--green);
+  position:relative;display:flex;flex-direction:column;
+  height:400px;                       /* ★ FIXED height — sab tiles ek jaise */
+  background:var(--card);border:1.5px solid var(--ink);border-radius:20px;
+  padding:22px 24px;box-shadow:6px 6px 0 var(--shadow);
+  transform:rotate(var(--tilt,0deg));
+  transition:transform .45s var(--ease),box-shadow .45s var(--ease),border-color .35s;
+  opacity:0;overflow:hidden;
+}
+.tile.in{animation:tileIn .8s var(--ease) var(--d,0s) both}
+.tile.done{animation:none;opacity:1}
+@keyframes tileIn{from{opacity:0;transform:translateY(44px) rotate(var(--tilt,0deg)) scale(.97)}to{opacity:1;transform:translateY(0) rotate(var(--tilt,0deg)) scale(1)}}
+.tile:nth-child(even){margin-top:52px}
+.tile:hover,.tile:focus-visible{
+  transform:translateY(-10px) rotate(0deg);
+  border-color:var(--tc);
+  box-shadow:11px 13px 0 color-mix(in srgb,var(--tc) 22%, transparent),6px 6px 0 var(--shadow);
+  outline:none;
+}
+.tile.pressing{transform:scale(.96) rotate(var(--tilt,0deg))}
+.t-top{display:flex;align-items:center;justify-content:space-between}
+.t-top .no{font-size:11px;letter-spacing:.2em;color:var(--ink-soft)}
+.t-ic{width:38px;height:38px;border:1.5px solid var(--line);border-radius:11px;display:grid;place-items:center;color:var(--tc);background:var(--paper2);transition:.3s}
+.t-ic svg{width:18px;height:18px}
+.t-sym{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
+.gsym{font-weight:600;font-size:118px;letter-spacing:-.02em;line-height:1;display:flex;transition:opacity .4s ease,transform .5s var(--ease)}
+.gsym span{display:inline-block}
+.tile:hover .gsym span{animation:hop .55s var(--ease);animation-delay:calc(var(--i)*75ms)}
+.tile:hover .gsym,.tile:focus-visible .gsym{opacity:.18;transform:scale(.92)}
+@keyframes hop{40%{transform:translateY(-12px)}}
+.znum{position:absolute;top:6px;left:2px;font-size:12px;font-weight:700;color:var(--tc);border:1.5px solid var(--tc);border-radius:7px;padding:2px 7px;background:var(--card)}
+.tile[data-ch="f"] .gsym{font-size:96px;font-style:italic}
+.tile[data-ch="hc"] .gsym{font-size:84px}
+.tile[data-ch="halo"] .gsym{font-size:60px}
+.tile[data-ch="oh"] .gsym{font-size:70px}
+.tile[data-ch="co"] .gsym{font-size:74px;gap:.02em}
+.t-bot{position:relative}
+.tname{font-size:24px;font-weight:600;letter-spacing:-.01em}
+.tbar{display:block;height:5px;width:100%;background:var(--tc);border-radius:3px;transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
+.tile:hover .tbar{transform:scaleX(1)}
+.tsub{margin-top:9px;font-size:10.5px;letter-spacing:.14em;color:var(--ink-soft)}
+.open-chip{position:absolute;right:0;bottom:2px;display:inline-flex;align-items:center;gap:5px;font-size:10.5px;letter-spacing:.14em;border:1.5px solid var(--ink);border-radius:999px;padding:6px 12px;background:var(--ink);color:var(--paper2);opacity:0;transform:translateX(-8px);transition:.35s var(--ease)}
+.tile:hover .open-chip{opacity:1;transform:translateX(0)}
+.open-chip svg{width:12px;height:12px}
+@media(max-width:760px){
+  .tiles-grid{grid-template-columns:1fr;gap:34px;max-width:440px}
+  .tile:nth-child(even){margin-top:0}
+  .tile{height:auto;min-height:340px}
+  .t-sym{min-height:170px}
+  .gsym{font-size:92px}
+  .tile[data-ch="f"] .gsym{font-size:80px}
+  .tile[data-ch="hc"] .gsym{font-size:70px}
+  .tile[data-ch="halo"] .gsym{font-size:50px}
+  .tile[data-ch="oh"] .gsym{font-size:56px}
+  .tile[data-ch="co"] .gsym{font-size:60px}
+}
+
+/* ============================================================
+   MEMBER PREVIEW — content box ke size me AUTO-FIT
+   .t2    → 2 chips  : bade row-chips, pura height fill
+   .dense → 10 chips : compact chips, perfect fit
+   (default) 4-6 chips: 2-col normal
+   ============================================================ */
+.t-members{
+  position:absolute;inset:0;z-index:3;border-radius:inherit;
+  background:var(--frost);
+  -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+  display:flex;flex-direction:column;gap:9px;
+  padding:16px 18px 14px;
+  opacity:0;transform:translateY(20px) scale(.985);
+  transition:opacity .38s ease,transform .5s var(--ease);
+  pointer-events:none;overflow:hidden;
+}
+.t-members::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:4px;
+  background:var(--tc);transform:scaleX(0);transform-origin:left;
+  transition:transform .55s var(--ease) .08s;
+}
+.tile:hover .t-members,.tile:focus-visible .t-members{opacity:1;transform:none;pointer-events:auto}
+.tile:hover .t-members::before,.tile:focus-visible .t-members::before{transform:scaleX(1)}
+
+.tm-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex:none}
+.tm-head b{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--tc)}
+.tm-head span{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--ink-soft);border:1px solid var(--line);border-radius:999px;padding:3px 9px;background:var(--chipbg)}
+
+.tm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;flex:1;min-height:0}
+.tm-chip{
+  position:relative;
+  border:1.5px solid var(--line);border-radius:11px;
+  background:var(--chipbg);
+  padding:8px 11px;display:flex;flex-direction:column;justify-content:center;gap:1px;
+  opacity:0;transform:translateY(14px) scale(.86);
+  transition:opacity .3s ease,transform .55s var(--spring),
+    border-color .25s,background .25s,box-shadow .25s;
+  transition-delay:0s;
+  overflow:hidden;
+}
+.tile:hover .tm-chip,.tile:focus-visible .tm-chip{
+  opacity:1;transform:none;
+  transition-delay:calc(.1s + var(--i)*var(--step,.05s));
+}
+.tile:hover .tm-chip:hover,.tile:focus-visible .tm-chip:hover{
+  transform:translateY(-3px) scale(1.045);
+  border-color:var(--tc);background:var(--card);
+  box-shadow:3px 4px 0 color-mix(in srgb,var(--tc) 28%,transparent);
+  transition-delay:0s;
+}
+.tm-chip.ready{cursor:pointer}
+.tm-chip.ready::after{
+  content:"READY";position:absolute;top:5px;right:6px;
+  font-family:'JetBrains Mono',monospace;font-size:7px;font-weight:700;letter-spacing:.1em;
+  color:var(--tc);
+}
+.tm-chip b{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--ink);line-height:1.2}
+.tm-chip.ready b{color:var(--tc)}
+.tm-chip span{font-size:10px;letter-spacing:.05em;color:var(--ink-soft);line-height:1.35}
+
+/* ★ 2-chip mode: chips bade row-chips — pura box fill */
+.tm-grid.t2{grid-template-columns:1fr;align-content:stretch}
+.tm-grid.t2 .tm-chip{
+  flex-direction:row;align-items:center;gap:14px;padding:12px 18px;
+}
+.tm-grid.t2 .tm-chip b{font-size:16px;white-space:nowrap}
+.tm-grid.t2 .tm-chip span{font-size:11px;line-height:1.4}
+
+/* ★ dense mode: 10 chips compact — sab fit */
+.tm-grid.dense{grid-template-columns:repeat(2,1fr);gap:5px;align-content:stretch}
+.tm-grid.dense .tm-chip{padding:4px 8px;gap:0;border-radius:9px}
+.tm-grid.dense .tm-chip b{font-size:11px}
+.tm-grid.dense .tm-chip span{font-size:8.5px;line-height:1.3}
+
+.tm-foot{
+  margin-top:auto;padding-top:9px;border-top:1px dashed var(--line);
+  display:flex;align-items:center;gap:7px;flex:none;
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--ink-soft);
+}
+.tm-foot svg{width:12px;height:12px;color:var(--tc)}
+
+@media(max-width:760px){
+  .t-members{padding:13px 14px}
+  .tm-grid{gap:6px}
+  .tm-chip{padding:6px 9px}
+  .tm-chip b{font-size:11.5px}
+  .tm-chip span{font-size:9px}
+  .tm-grid.dense{gap:4px}
+  .tm-grid.dense .tm-chip{padding:3px 6px}
+  .tm-grid.dense .tm-chip b{font-size:10px}
+  .tm-grid.dense .tm-chip span{font-size:7.5px}
+  .tm-grid.t2 .tm-chip{padding:9px 12px;gap:10px}
+  .tm-grid.t2 .tm-chip b{font-size:13px}
+  .tm-grid.t2 .tm-chip span{font-size:9.5px}
+  .tm-foot span{display:none}
+}
+
+/* ---------- toast ---------- */
+.toast{
+  position:fixed;left:50%;bottom:34px;z-index:200;
+  transform:translate(-50%,80px);opacity:0;
+  background:var(--ink);color:var(--paper2);
+  border-radius:999px;padding:12px 22px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;
+  box-shadow:0 12px 34px rgba(0,0,0,.35);
+  transition:transform .5s var(--spring),opacity .35s ease;
+  pointer-events:none;white-space:nowrap;
+}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+/* ---------- footer ---------- */
+.site-foot{border-top:1.5px solid var(--ink);background:var(--paper2);display:flex;align-items:center;justify-content:space-between;gap:14px;padding:22px 28px;flex-wrap:wrap}
+.site-foot .mono{font-size:10.5px;letter-spacing:.16em;color:var(--ink-soft)}
+.top-btn{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--ink);background:transparent;border-radius:999px;padding:8px 16px;font-size:10.5px;letter-spacing:.16em;transition:.25s var(--ease)}
+.top-btn:hover{background:var(--ink);color:var(--paper2);transform:translateY(-2px)}
+.top-btn svg{width:13px;height:13px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}
+}
+
+/* ============================================================
+   USER PROFILE & MODALS
+   ============================================================ */
+
+/* Profile Header UI */
+.user-profile-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 14px;
+    padding: 4px 10px 4px 4px;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s var(--ease);
+    position: relative;
+}
+
+.user-profile-nav:hover {
+    border-color: var(--ink);
+    background: var(--card);
+}
+
+.user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--blue);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.user-name-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    white-space: nowrap;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Modals Overlay */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Modal Box */
+.modal-box {
+    background: var(--card);
+    border: 2px solid var(--ink);
+    border-radius: 20px;
+    padding: 30px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 8px 8px 0 var(--ink);
+    transform: translateY(20px);
+    transition: transform 0.4s var(--ease);
+}
+
+.modal-overlay.active .modal-box {
+    transform: translateY(0);
+}
+
+.modal-title {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: var(--ink);
+}
+
+.modal-sub {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+    border: 1.5px solid var(--ink);
+    transition: 0.2s;
+}
+
+.btn.btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+}
+
+.btn.btn-primary:hover {
+    background: var(--blue);
+    border-color: var(--blue);
+}
+
+.btn.btn-danger {
+    background: var(--verm);
+    color: #fff;
+    border-color: var(--verm);
+}
+
+.btn.btn-outline {
+    background: transparent;
+    color: var(--ink);
+}
+
+.btn.btn-outline:hover {
+    background: var(--paper);
+}
+
+/* Onboarding Form */
+.ob-group {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ob-group label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+}
+
+.ob-group input, .ob-group select {
+    padding: 10px 12px;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    background: var(--paper);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+}
+
+.ob-group input:focus, .ob-group select:focus {
+    outline: none;
+    border-color: var(--ink);
+    background: var(--card);
+}
+
+/* Avatars */
+.avatar-grid {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+.avatar-opt {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    font-size: 24px;
+    display: grid;
+    place-items: center;
+    background: var(--paper);
+    transition: 0.2s;
+}
+
+.avatar-opt.selected {
+    border-color: var(--blue);
+    background: rgba(74, 111, 165, 0.1);
+    transform: scale(1.1);
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div class="cur-dot"></div>
+<div class="cur-ring"></div>
+<div class="toast" id="toast"></div>
+
+<!-- ================= HEADER ================= -->
+<header class="site-head">
+  <a class="brand" href="#" aria-label="NexInc home">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <path d="M14 2 L24.5 8 V20 L14 26 L3.5 20 V8 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M9.5 18.5 V9.5 L18.5 18.5 V9.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="21.5" cy="6.5" r="2.4" style="fill:var(--verm)"/>
+    </svg>
+    <span class="bname">Nex<em>Inc</em></span>
+  </a>
+  <nav style="display: flex; align-items: center; gap: 20px;">
+    <button class="mono nav-link" id="navCh">SECTIONS</button>
+    <button class="theme-btn" id="themeBtn" aria-label="Theme badlo">
+      <i class="ic-sun" data-lucide="sun"></i>
+      <i class="ic-moon" data-lucide="moon"></i>
+    </button>
+  </nav>
+  <div class="head-right">
+    <span class="mono head-tag">NEXINC · JEE CHEMISTRY</span>
+    <!-- User Profile Dropdown / Button -->
+    <div class="user-profile-nav" id="userProfileBtn" title="Logout">
+      <div class="user-avatar" id="navAvatar">U</div>
+      <span class="user-name-label" id="navName">User</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="hero">
+    <p class="overline mono">NEXINC · INTERACTIVE JEE CHEMISTRY · IMPORTANT COMPOUNDS KE VISUALS</p>
+    <h1 class="hero-h">
+      <span class="line">
+        <span class="w" style="--d:.05s">Ab</span> <span class="w" style="--d:.13s">chemistry</span> <span class="w" style="--d:.21s">ko</span>
+      </span>
+      <span class="line">
+        <span class="w circled" style="--d:.32s">chhoo<svg class="circ" viewBox="0 0 100 40" preserveAspectRatio="none"><path pathLength="1" d="M10 27 C 14 8, 90 3, 95 18 C 97 31, 32 39, 11 31 C 3 27, 7 15, 22 12"/></svg></span>
+        <span class="w" style="--d:.40s">ke</span> <span class="w" style="--d:.48s">dekho.</span>
+      </span>
+    </h1>
+    <p class="hero-sub"><b>Hydrogen se f-block tak</b>, hydrocarbons se biomolecules tak — sab groups, sab families, ek interactive bench pe.</p>
+    <a href="#inorganic" class="hint mono">NEECHE SCROLL KARO <i data-lucide="arrow-down"></i></a>
+  </section>
+
+  <!-- ================= MARQUEE ================= -->
+  <div class="marquee" aria-hidden="true">
+    <div class="mtrack">
+      <div class="mgroup">
+        <span>HYDROGEN</span><i class="dm" style="background:var(--blue)"></i>
+        <span>S-BLOCK</span><i class="dm" style="background:var(--green)"></i>
+        <span>P-BLOCK</span><i class="dm" style="background:var(--teal)"></i>
+        <span>D-BLOCK</span><i class="dm" style="background:var(--verm)"></i>
+        <span>F-BLOCK</span><i class="dm" style="background:var(--amber)"></i>
+        <span>ORGANIC · 6 FAMILIES</span><i class="dm" style="background:var(--blue)"></i>
+        <span>HYDROGEN</span><i class="dm" style="background:var(--blue)"></i>
+        <span>S-BLOCK</span><i class="dm" style="background:var(--green)"></i>
+        <span>P-BLOCK</span><i class="dm" style="background:var(--teal)"></i>
+        <span>D-BLOCK</span><i class="dm" style="background:var(--verm)"></i>
+        <span>F-BLOCK</span><i class="dm" style="background:var(--amber)"></i>
+        <span>ORGANIC · 6 FAMILIES</span><i class="dm" style="background:var(--blue)"></i>
+      </div>
+      <div class="mgroup">
+        <span>HYDROGEN</span><i class="dm" style="background:var(--blue)"></i>
+        <span>S-BLOCK</span><i class="dm" style="background:var(--green)"></i>
+        <span>P-BLOCK</span><i class="dm" style="background:var(--teal)"></i>
+        <span>D-BLOCK</span><i class="dm" style="background:var(--verm)"></i>
+        <span>F-BLOCK</span><i class="dm" style="background:var(--amber)"></i>
+        <span>ORGANIC · 6 FAMILIES</span><i class="dm" style="background:var(--blue)"></i>
+        <span>HYDROGEN</span><i class="dm" style="background:var(--blue)"></i>
+        <span>S-BLOCK</span><i class="dm" style="background:var(--green)"></i>
+        <span>P-BLOCK</span><i class="dm" style="background:var(--teal)"></i>
+        <span>D-BLOCK</span><i class="dm" style="background:var(--verm)"></i>
+        <span>F-BLOCK</span><i class="dm" style="background:var(--amber)"></i>
+        <span>ORGANIC · 6 FAMILIES</span><i class="dm" style="background:var(--blue)"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= INORGANIC ================= -->
+  <section class="sec" id="inorganic">
+    <p class="bench-kick mono">SECTION 01 · INORGANIC</p>
+    <p class="bench-sub mono">TILE PE <b>HOVER</b> → GROUPS REVEAL · <b>GROUP 16 LIVE</b></p>
+    <div class="tiles-grid">      <!-- ========== IN·01 HYDROGEN ========== -->
+      <article class="tile" data-ch="h" data-name="Hydrogen" style="--tc:var(--blue);--tilt:-1.3deg;--d:.05s" tabindex="0">
+        <div class="t-top"><span class="no mono">IN·01</span><span class="t-ic"><i data-lucide="flame"></i></span></div>
+        <div class="t-sym"><span class="znum mono">1</span><span class="gsym"><span style="--i:0">H</span></span></div>
+        <div class="t-bot">
+          <h3 class="tname">Hydrogen</h3><span class="tbar"></span>
+          <p class="mono tsub">THE UNIQUE ELEMENT</p>
+          <span class="open-chip mono">CLICK TO EXPLORE <i data-lucide="arrow-right"></i></span>
+        </div>
+        <div class="t-members" aria-hidden="true">
+          <div class="tm-head"><b>HYDROGEN</b><span>COMPOUNDS LAB</span></div>
+          <div class="tm-grid t1" style="--step:.06s">
+            <div class="tm-chip" style="--i:0" data-goto="hydrogen.html">
+              <b>Explore Compounds</b>
+              <span>Interactive 2D & 3D Visuals of Hydrogen compounds like H₂O, H₂O₂, etc.</span>
+            </div>
+          </div>
+          <div class="tm-foot"><i data-lucide="sparkles"></i><span>VISUAL LAB IS LIVE</span></div>
+        </div>
+      </article>
+
+      <!-- ========== IN·02 S-BLOCK ========== -->
+      <article class="tile" data-ch="s" data-name="S-Block" style="--tc:var(--green);--tilt:1deg;--d:.15s" tabindex="0">
+        <div class="t-top"><span class="no mono">IN·02</span><span class="t-ic"><i data-lucide="layers"></i></span></div>
+        <div class="t-sym"><span class="gsym"><span style="--i:0">S</span></span></div>
+        <div class="t-bot">
+          <h3 class="tname">S-Block</h3><span class="tbar"></span>
+          <p class="mono tsub">GROUPS 1 – 2</p>
+          <span class="open-chip mono">SOON <i data-lucide="clock"></i></span>
+        </div>
+        <div class="t-members" aria-hidden="true">
+          <div class="tm-head"><b>S-BLOCK</b><span>2 GROUPS</span></div>
+          <div class="tm-grid t2" style="--step:.06s">
+            <div class="tm-chip" style="--i:0"><b>Group 01</b><span>Alkali Metals · ns¹ · soft, reactive metals</span></div>
+            <div class="tm-chip" style="--i:1"><b>Group 02</b><span>Alkaline Earth Metals · ns² · harder metals</span></div>
+          </div>
+          <div class="tm-foot"><i data-lucide="sparkles"></i><span>CONTENT JALD AA RAHA HAI</span></div>
+        </div>
+      </article>
+
+      <!-- ========== IN·03 P-BLOCK ========== -->
+      <article class="tile" data-ch="p" data-name="P-Block" style="--tc:var(--teal);--tilt:1.1deg;--d:.25s" tabindex="0">
+        <div class="t-top"><span class="no mono">IN·03</span><span class="t-ic"><i data-lucide="atom"></i></span></div>
+        <div class="t-sym"><span class="znum mono">13–18</span><span class="gsym"><span style="--i:0">P</span></span></div>
+        <div class="t-bot">
+          <h3 class="tname">P-Block</h3><span class="tbar"></span>
+          <p class="mono tsub">GROUPS 13 – 18 · 1 LIVE</p>
+          <span class="open-chip mono">EXPLORE <i data-lucide="arrow-up-right"></i></span>
+        </div>
+        <div class="t-members" aria-hidden="true">
+          <div class="tm-head"><b>P-BLOCK</b><span>6 GROUPS</span></div>
+          <div class="tm-grid" style="--step:.055s">
+            <div class="tm-chip" style="--i:0"><b>Group 13</b><span>Boron Family · ns²np¹</span></div>
+            <div class="tm-chip" style="--i:1"><b>Group 14</b><span>Carbon Family · ns²np²</span></div>
+            <div class="tm-chip" style="--i:2"><b>Group 15</b><span>Nitrogen Family · Pnictogens</span></div>
+            <div class="tm-chip ready" data-goto="group16.html" style="--i:3"><b>Group 16</b><span>Chalcogens · ns²np⁴</span></div>
+            <div class="tm-chip" style="--i:4"><b>Group 17</b><span>Halogens · ns²np⁵</span></div>
+            <div class="tm-chip" style="--i:5"><b>Group 18</b><span>Noble Gases · ns²np⁶</span></div>
+          </div>
+          <div class="tm-foot"><i data-lucide="sparkles"></i><span>GROUP 16 · HYDRIDES READY</span></div>
+        </div>
+      </article>
+
+      <!-- ========== IN·04 D-BLOCK ========== -->
+      <article class="tile" data-ch="d" data-name="D-Block" style="--tc:var(--verm);--tilt:-0.8deg;--d:.35s" tabindex="0">
+        <div class="t-top"><span class="no mono">IN·04</span><span class="t-ic"><i data-lucide="boxes"></i></span></div>
+        <div class="t-sym"><span class="gsym"><span style="--i:0">D</span></span></div>
+        <div class="t-bot">
+          <h3 class="tname">D-Block</h3><span class="tbar"></span>
+          <p class="mono tsub">GROUPS 3 – 12 · TRANSITION</p>
+          <span class="open-chip mono">SOON <i data-lucide="clock"></i></span>
+        </div>
+        <div class="t-members" aria-hidden="true">
+          <div class="tm-head"><b>D-BLOCK</b><span>10 GROUPS</span></div>
+          <div class="tm-grid dense" style="--step:.03s">
+            <div class="tm-chip" style="--i:0"><b>Group 03</b><span>Scandium Group</span></div>
+            <div class="tm-chip" style="--i:1"><b>Group 04</b><span>Titanium Group</span></div>
+            <div class="tm-chip" style="--i:2"><b>Group 05</b><span>Vanadium Group</span></div>
+            <div class="tm-chip" style="--i:3"><b>Group 06</b><span>Chromium Group</span></div>
+            <div class="tm-chip" style="--i:4"><b>Group 07</b><span>Manganese Group</span></div>
+            <div class="tm-chip" style="--i:5"><b>Group 08</b><span>Iron Group</span></div>
+            <div class="tm-chip" style="--i:6"><b>Group 09</b><span>Cobalt Group</span></div>
+            <div class="tm-chip" style="--i:7"><b>Group 10</b><span>Nickel Group</span></div>
+            <div class="tm-chip" style="--i:8"><b>Group 11</b><span>Copper Group · Coinage</span></div>
+            <div class="tm-chip" style="--i:9"><b>Group 12</b><span>Zinc Group · d¹⁰</span></div>
+          </div>
+          <div class="tm-foot"><i data-lucide="sparkles"></i><span>CONTENT JALD AA RAHA HAI</span></div>
+        </div>
+      </article>
+
+      <!-- ========== IN·05 F-BLOCK ========== -->
+      <article class="tile" data-ch="f" data-name="F-Block" style="--tc:var(--amber);--tilt:0.9deg;--d:.45s" tabindex="0">
+        <div class="t-top"><span class="no mono">IN·05</span><span class="t-ic"><i data-lucide="orbit"></i></span></div>
+        <div class="t-sym"><span class="gsym"><span style="--i:0">4</span><span style="--i:1">f</span></span></div>
+        <div class="t-bot">
+          <h3 class="tname">F-Block</h3><span class="tbar"></span>
+          <p class="mono tsub">INNER TRANSITION · 2 SERIES</p>
+          <span class="open-chip mono">SOON <i data-lucide="clock"></i></span>
+        </div>
+        <div class="t-members" aria-hidden="true">
+          <div class="tm-head"><b>F-BLOCK</b><span>2 SERIES</span></div>
+          <div class="tm-grid t2" style="--step:.08s">
+            <div class="tm-chip" style="--i:0"><b>4f Series</b><span>Lanthanoids · Ce(58) → Lu(71) · contraction story</span></div>
+            <div class="tm-chip" style="--i:1"><b>5f Series</b><span>Actinoids · Th(90) → Lr(103) · radioactive</span></div>
+          </div>
+          <div class="tm-foot"><i data-lucide="sparkles"></i><span>CONTENT JALD AA RAHA HAI</span></div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ================= ORGANIC MARQUEE (reversed) ================= -->
+  <div class="marquee rev" aria-hidden="true" style="margin-top:40px">
+    <div class="mtrack">
+      <div class="mgroup">
+        <span>HYDROCARBONS</span><i class="dm" style="background:var(--green)"></i>
+        <span>HALO COMPOUNDS</span><i class="dm" style="background:var(--verm)"></i>
+        <span>ALCOHOLS · PHENOLS · ETHERS</span><i class="dm" style="background:var(--teal)"></i>
+        <span>ALDEHYDES · KETONES · ACIDS</span><i class="dm" style="background:var(--amber)"></i>
+        <span>AMINES</span><i class="dm" style="background:var(--green)"></i>
+        <span>BIOMOLECULES</span><i class="dm" style="background:var(--verm)"></i>
+        <span>HYDROCARBONS</span><i class="dm" style="background:var(--green)"></i>
+        <span>HALO COMPOUNDS</span><i class="dm" style="background:var(--verm)"></i>
+        <span>ALCOHOLS · PHENOLS · ETHERS</span><i class="dm" style="background:var(--teal)"></i>
+        <span>ALDEHYDES · KETONES · ACIDS</span><i class="dm" style="background:var(--amber)"></i>
+        <span>AMINES</span><i class="dm" style="background:var(--green)"></i>
+        <span>BIOMOLECULES</span><i class="dm" style="background:var(--verm)"></i>
+      </div>
+      <div class="mgroup">
+        <span>HYDROCARBONS</span><i class="dm" style="background:var(--green)"></i>
+        <span>HALO COMPOUNDS</span><i class="dm" style="background:var(--verm)"></i>
+        <span>ALCOHOLS · PHENOLS · ETHERS</span><i class="dm" style="background:var(--teal)"></i>
+        <span>ALDEHYDES · KETONES · ACIDS</span><i class="dm" style="background:var(--amber)"></i>
+        <span>AMINES</span><i class="dm" style="background:var(--green)"></i>
+        <span>BIOMOLECULES</span><i class="dm" style="background:var(--verm)"></i>
+        <span>HYDROCARBONS</span><i class="dm" style="background:var(--green)"></i>
+        <span>HALO COMPOUNDS</span><i class="dm" style="background:var(--verm)"></i>
+        <span>ALCOHOLS · PHENOLS · ETHERS</span><i class="dm" style="background:var(--teal)"></i>
+        <span>ALDEHYDES · KETONES · ACIDS</span><i class="dm" style="background:var(--amber)"></i>
+        <span>AMINES</span><i class="dm" style="background:var(--green)"></i>
+        <span>BIOMOLECULES</span><i class="dm" style="background:var(--verm)"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ORGANIC ================= -->
+  <section class="sec" id="organic">
+    <p class="bench-kick mono">SECTION 02 · ORGANIC</p>
+    <p class="bench-sub mono">TILE PE <b>HOVER</b> → FAMILIES REVEAL</p>
+    <div class="tiles-grid">
+
+      <!-- OR·01 HYDROCARBONS -->
+      <article class="tile" data-ch="hc" data-name="Hydrocarbons" style="--tc:var(--green);--tilt:-1.2deg;--d:.05s" tabindex="0">
+        <div class="t-top"><span class="no mono">OR·01</span><span class="t-ic"><i data-lucide="flask-conical"></i></span></div>
+        <div class="t-sym"><span class="gsym"><span style="--i:0">H</span><span style="--i:1">C</span></span></div>
+        <div class="t-bot">
+          <h3 class="tname">Hydrocarbons</h3><span class="tbar"></span>
+          <p class="mono tsub">ALKANES · ALKENES · ALKYNES · AROMATIC</p>
+          <span class="open-chip mono">SOON <i data-lucide="clock"></i></span>
+        </div>
+        <div class="t-members" aria-hidden="true">
+          <div class="tm-head"><b>HYDROCARBONS</b><span>4 TYPES</span></div>
+          <div class="tm-grid" style="--step:.05s">
+            <div class="tm-chip" style="--i:0"><b>CₙH₂ₙ₊₂</b><span>Alkanes — saturated</span></div>
+            <div class="tm-chip" style="--i:1"><b>C=C</b><span>Alkenes — unsaturated</span></div>
+            <div class="tm-chip" style="--i:2"><b>C≡C</b><span>Alkynes — triple bond</span></div>
+            <div class="tm-chip" style="--i:3"><b>C₆H₆</b><span>Aromatic — delocalised π</span></div>
+          </div>
+          <div class="tm-foot"><i data-lucide="sparkles"></i><span>CONTENT JALD AA RAHA HAI</span></div>
+        </div>
+      </article>
+
+      <!-- OR·02 HALO COMPOUNDS -->
+      <article class="tile" data-ch="halo" data-name="Halo Compounds" style="--tc:var(--verm);--tilt:1deg;--d:.15s" tabindex="0">
+        <div class="t-top"><span class="no mono">OR·02</span><span class="t-ic"><i data-lucide="beaker"></i></span></div>
+        <div class="t-sym"><span class="gsym"><span style="--i:0">R</span><span style="--i:1">–</span><span style="--i:2">X</span></span></div>
+        <div class="t-bot">
+          <h3 class="tname">Halo Compounds</h3><span class="tbar"></span>
+          <p class="mono tsub">HALOALKANES · HALOARENES</p>
+          <span class="open-chip mono">SOON <i data-lucide="clock"></i></span>
+        </div>
+        <div class="t-members" aria-hidden="true">
+          <div class="tm-head"><b>R–X FAMILY</b><span>2 TYPES</span></div>
+          <div class="tm-grid t2" style="--step:.07s">
+            <div class="tm-chip" style="--i:0"><b>R–X</b><span>Haloalkanes · sp³ C–X bond · SN1/SN2 reactions</span></div>
+            <div class="tm-chip" style="--i:1"><b>Ar–X</b><span>Haloarenes · sp² C–X bond · resonance stable</span></div>
+          </div>
+          <div class="tm-foot"><i data-lucide="sparkles"></i><span>CONTENT JALD AA RAHA HAI</span></div>
+        </div>
+      </article>
+
+      <!-- OR·03 ALCOHOLS · PHENOLS · ETHERS -->
+      <article class="tile" data-ch="oh" data-name="Alcohols · Phenols · Ethers" style="--tc:var(--teal);--tilt:1.1deg;--d:.25s" tabindex="0">
+        <div class="t-top"><span class="no mono">OR·03</span><span class="t-ic"><i data-lucide="flask-round"></i></span></div>
+        <div class="t-sym"><span class="gsym"><span style="--i:0">O</span><span style="--i:1">H</span></span></div>
+        <div class="t-bot">
+          <h3 class="tname">Alcohols · Phenols · Ethers</h3><span class="tbar"></span>
+          <p class="mono tsub">–OH / –O– FAMILY</p>
+          <span class="open-chip mono">SOON <i data-lucide="clock"></i></span>
+        </div>
+        <div class="t-members" aria-hidden="true">
+          <div class="tm-head"><b>–OH / –O–</b><span>3 TYPES</span></div>
+          <div class="tm-grid" style="--step:.06s">
+            <div class="tm-chip" style="--i:0"><b>R–OH</b><span>Alcohols — H-bonding</span></div>
+            <div class="tm-chip" style="--i:1"><b>Ph–OH</b><span>Phenols — acidic –OH</span></div>
+            <div class="tm-chip" style="--i:2"><b>R–O–R</b><span>Ethers — inert linkage</span></div>
+            <div class="tm-chip" style="--i:3"><b>Lucas Test</b><span>1° / 2° / 3° alcohols</span></div>
+          </div>
+          <div class="tm-foot"><i data-lucide="sparkles"></i><span>CONTENT JALD AA RAHA HAI</span></div>
+        </div>
+      </article>
+
+      <!-- OR·04 CARBONYLS & ACIDS -->
+      <article class="tile" data-ch="co" data-name="Aldehydes · Ketones · Acids" style="--tc:var(--amber);--tilt:-0.9deg;--d:.35s" tabindex="0">
+        <div class="t-top"><span class="no mono">OR·04</span><span class="t-ic"><i data-lucide="test-tube"></i></span></div>
+        <div class="t-sym"><span class="gsym"><span style="--i:0">C</span><span style="--i:1">H</span><span style="--i:2">O</span></span></div>
+        <div class="t-bot">
+          <h3 class="tname">Aldehydes · Ketones · Acids</h3><span class="tbar"></span>
+          <p class="mono tsub">C=O · –COOH FAMILY</p>
+          <span class="open-chip mono">SOON <i data-lucide="clock"></i></span>
+        </div>
+        <div class="t-members" aria-hidden="true">
+          <div class="tm-head"><b>C=O FAMILY</b><span>3 TYPES</span></div>
+          <div class="tm-grid" style="--step:.06s">
+            <div class="tm-chip" style="--i:0"><b>–CHO</b><span>Aldehydes — reducing end</span></div>
+            <div class="tm-chip" style="--i:1"><b>R–CO–R</b><span>Ketones — mid-chain</span></div>
+            <div class="tm-chip" style="--i:2"><b>–COOH</b><span>Carboxylic Acids — proton donors</span></div>
+            <div class="tm-chip" style="--i:3"><b>Aldol</b><span>α-H wale — dil. NaOH</span></div>
+          </div>
+          <div class="tm-foot"><i data-lucide="sparkles"></i><span>CONTENT JALD AA RAHA HAI</span></div>
+        </div>
+      </article>
+
+      <!-- OR·05 AMINES -->
+      <article class="tile" data-ch="am" data-name="Amines" style="--tc:var(--green);--tilt:0.9deg;--d:.45s" tabindex="0">
+        <div class="t-top"><span class="no mono">OR·05</span><span class="t-ic"><i data-lucide="atom"></i></span></div>
+        <div class="t-sym"><span class="gsym"><span style="--i:0">N</span></span></div>
+        <div class="t-bot">
+          <h3 class="tname">Amines</h3><span class="tbar"></span>
+          <p class="mono tsub">NITROGEN FAMILY</p>
+          <span class="open-chip mono">SOON <i data-lucide="clock"></i></span>
+        </div>
+        <div class="t-members" aria-hidden="true">
+          <div class="tm-head"><b>N FAMILY</b><span>2 TYPES</span></div>
+          <div class="tm-grid t2" style="--step:.07s">
+            <div class="tm-chip" style="--i:0"><b>–NH₂</b><span>Amines · basic · 1° / 2° / 3° classification</span></div>
+            <div class="tm-chip" style="--i:1"><b>ArN₂⁺</b><span>Diazonium Salts · dye chemistry · Sandmeyer</span></div>
+          </div>
+          <div class="tm-foot"><i data-lucide="sparkles"></i><span>CONTENT JALD AA RAHA HAI</span></div>
+        </div>
+      </article>
+
+      <!-- OR·06 BIOMOLECULES -->
+      <article class="tile" data-ch="bio" data-name="Biomolecules" style="--tc:var(--verm);--tilt:-1deg;--d:.55s" tabindex="0">
+        <div class="t-top"><span class="no mono">OR·06</span><span class="t-ic"><i data-lucide="dna"></i></span></div>
+        <div class="t-sym"><span class="gsym"><span style="--i:0">B</span></span></div>
+        <div class="t-bot">
+          <h3 class="tname">Biomolecules</h3><span class="tbar"></span>
+          <p class="mono tsub">SUGARS · PROTEINS · VITAMINS · DNA</p>
+          <span class="open-chip mono">SOON <i data-lucide="clock"></i></span>
+        </div>
+        <div class="t-members" aria-hidden="true">
+          <div class="tm-head"><b>BIOMOLECULES</b><span>4 TYPES</span></div>
+          <div class="tm-grid" style="--step:.05s">
+            <div class="tm-chip" style="--i:0"><b>C₆H₁₂O₆</b><span>Carbohydrates — sugars</span></div>
+            <div class="tm-chip" style="--i:1"><b>–CO–NH–</b><span>Proteins — peptide chains</span></div>
+            <div class="tm-chip" style="--i:2"><b>A·D·E·K / B·C</b><span>Vitamins — fat / water</span></div>
+            <div class="tm-chip" style="--i:3"><b>DNA · RNA</b><span>Nucleic Acids — double helix</span></div>
+          </div>
+          <div class="tm-foot"><i data-lucide="sparkles"></i><span>CONTENT JALD AA RAHA HAI</span></div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-foot">
+  <span class="mono">© 2025 NEXINC</span>
+  <span class="mono">HOVER KARO · CLICK KARO · REVISION HO JAAYEGA.</span>
+  <button class="top-btn mono" id="toTop">TOP <i data-lucide="arrow-up"></i></button>
+</footer>
+
+  <!-- Logout Modal -->
+  <div class="modal-overlay" id="logoutModal">
+    <div class="modal-box">
+      <h2 class="modal-title">Log out</h2>
+      <p class="modal-sub">Are you sure you want to log out of NexInc?</p>
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="cancelLogoutBtn">Cancel</button>
+        <button class="btn btn-danger" id="confirmLogoutBtn">Log out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Onboarding Modal -->
+  <div class="modal-overlay" id="onboardModal">
+    <div class="modal-box" style="max-width: 440px;">
+      <h2 class="modal-title">Welcome to NexInc</h2>
+      <p class="modal-sub">Tell us a bit about yourself to personalize your bench.</p>
+      
+      <div class="ob-group">
+        <label>YOUR NAME</label>
+        <input type="text" id="obName" placeholder="e.g. Marie Curie" required>
+      </div>
+      
+      <div class="ob-group">
+        <label>CLASS / GRADE</label>
+        <select id="obClass">
+          <option value="11th">Class 11 (JEE/NEET)</option>
+          <option value="12th">Class 12 (JEE/NEET)</option>
+          <option value="Dropper">Dropper</option>
+          <option value="Other">Other / College</option>
+        </select>
+      </div>
+
+      <div class="ob-group">
+        <label>WHERE DID YOU HEAR ABOUT US?</label>
+        <select id="obSource">
+          <option value="YouTube">YouTube</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Friend">Friend / Classmate</option>
+          <option value="Google">Google Search</option>
+        </select>
+      </div>
+
+      <div class="ob-group">
+        <label>CHOOSE AVATAR</label>
+        <div class="avatar-grid" id="avatarGrid">
+          <div class="avatar-opt selected" data-av="👨‍🔬">👨‍🔬</div>
+          <div class="avatar-opt" data-av="👩‍🔬">👩‍🔬</div>
+          <div class="avatar-opt" data-av="⚛️">⚛️</div>
+          <div class="avatar-opt" data-av="🚀">🚀</div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="saveProfileBtn">Let's Go!</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="js/dashboard.js"></script>
+<script>
+/* ============================================================
+   NEXINC — LANDING v6
+   ============================================================ */
+if (window.lucide) lucide.createIcons();
+const $  = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- 0. THEME ---------- */
+const themeBtn = $('#themeBtn');
+let themeCur = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+themeBtn.addEventListener('click', () => {
+  document.documentElement.classList.add('theming');
+  themeCur = themeCur === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = themeCur;
+  try{ localStorage.setItem('nexinc-theme', themeCur); }catch(e){}
+  setTimeout(() => document.documentElement.classList.remove('theming'), 550);
+});
+
+/* ---------- 1. custom cursor ---------- */
+const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+const dot = $('.cur-dot'), ring = $('.cur-ring');
+let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my;
+if (fine){
+  document.body.classList.add('cursor-on');
+  addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  document.addEventListener('mouseover', e => {
+    ring.classList.toggle('big', !!e.target.closest('a,button,.tile,.tm-chip'));
+  });
+  document.addEventListener('mouseleave', () => { dot.style.opacity = 0; ring.style.opacity = 0; });
+  document.addEventListener('mouseenter', () => { dot.style.opacity = ''; ring.style.opacity = ''; });
+}
+
+/* ---------- 2. background network ---------- */
+const cv = $('#bg'), cx = cv.getContext('2d');
+const THEMES = {
+  light:{dot:'30,36,32',    acc:['#2E7D52','#C94F2E','#0E7C86','#A06B12']},
+  dark :{dot:'239,232,216', acc:['#4CBF8B','#E8794F','#35B5C2','#E0AC4F']}
+};
+let W, H, nodes = [], pulses = [], lastT = 0;
+function sizeCanvas(){
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr;
+  cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+function initNodes(){
+  nodes = [];
+  const n = Math.round(Math.min(92, (W * H) / 15000));
+  for (let i = 0; i < n; i++){
+    nodes.push({
+      x: Math.random()*W, y: Math.random()*H,
+      vx: (Math.random()-.5)*.4, vy: (Math.random()-.5)*.4,
+      r: 1.4 + Math.random()*1.4,
+      a: .15 + Math.random()*.2,
+      acc: Math.random() < .1 ? (Math.random()*4)|0 : -1,
+      pt: 2 + Math.random()*8
+    });
+  }
+}
+function drawBG(dt){
+  const T = THEMES[themeCur];
+  cx.clearRect(0, 0, W, H);
+  const LINK = 118;
+  for (let i = 0; i < nodes.length; i++){
+    const a = nodes[i];
+    for (let j = i+1; j < nodes.length; j++){
+      const b = nodes[j];
+      const d = Math.hypot(a.x-b.x, a.y-b.y);
+      if (d < LINK){
+        cx.strokeStyle = 'rgba(' + T.dot + ',' + (.09*(1-d/LINK)).toFixed(3) + ')';
+        cx.lineWidth = 1;
+        cx.beginPath(); cx.moveTo(a.x, a.y); cx.lineTo(b.x, b.y); cx.stroke();
+      }
+    }
+  }
+  for (const n of nodes){
+    if (fine){
+      const dx = n.x - mx, dy = n.y - my, d = Math.hypot(dx, dy);
+      if (d < 130 && d > 1){ const f = (130-d)/130*.5; n.vx += dx/d*f; n.vy += dy/d*f; }
+    }
+    n.vx *= .992; n.vy *= .992;
+    const sp = Math.hypot(n.vx, n.vy);
+    if (sp > .7){ n.vx *= .7/sp; n.vy *= .7/sp; }
+    n.x += n.vx * dt; n.y += n.vy * dt;
+    if (n.x < -20) n.x = W+20; if (n.x > W+20) n.x = -20;
+    if (n.y < -20) n.y = H+20; if (n.y > H+20) n.y = -20;
+    n.pt -= dt;
+    if (n.pt < 0){
+      pulses.push({x:n.x, y:n.y, r:0, c: n.acc >= 0 ? T.acc[n.acc] : 'rgb(' + T.dot + ')'});
+      n.pt = 6 + Math.random()*9;
+    }
+    cx.fillStyle = n.acc >= 0 ? T.acc[n.acc] : 'rgba(' + T.dot + ',' + n.a + ')';
+    cx.beginPath(); cx.arc(n.x, n.y, n.r, 0, 7); cx.fill();
+  }
+  for (let i = pulses.length-1; i >= 0; i--){
+    const p = pulses[i]; p.r += 1.1 * dt;
+    const al = .26 * (1 - p.r/64);
+    if (al <= 0){ pulses.splice(i,1); continue; }
+    cx.strokeStyle = p.c; cx.globalAlpha = al; cx.lineWidth = 1.2;
+    cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, 7); cx.stroke(); cx.globalAlpha = 1;
+  }
+}
+sizeCanvas(); initNodes();
+addEventListener('resize', () => { sizeCanvas(); initNodes(); });
+
+/* ---------- 3. master loop ---------- */
+(function loop(t){
+  const dt = Math.min(2.5, (t - lastT) / 16.7 || 1); lastT = t;
+  if (!reduced) drawBG(dt);
+  if (fine){
+    rx += (mx - rx) * .16; ry += (my - ry) * .16;
+    dot.style.transform  = 'translate(' + mx + 'px,' + my + 'px) translate(-50%,-50%)';
+    ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px) translate(-50%,-50%)';
+  }
+  requestAnimationFrame(loop);
+})(0);
+
+/* ---------- 4. tiles entrance ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting){
+    e.target.classList.add('in');
+    e.target.addEventListener('animationend', function h(){
+      e.target.classList.add('done'); e.target.removeEventListener('animationend', h);
+    }, {once:true});
+    io.unobserve(e.target);
+  }
+}), {threshold:.15});
+ $$('.tile').forEach(t => io.observe(t));
+
+/* ---------- 5. clicks ---------- */
+const toastEl = $('#toast');
+let toastTimer = null;
+function showToast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2100);
+}
+ $$('.tile').forEach(t => {
+  t.addEventListener('click', () => {
+    t.classList.add('pressing');
+    setTimeout(() => t.classList.remove('pressing'), 320);
+    showToast((t.dataset.name || 'YEH SECTION') + ' — JALD AA RAHA HAI');
+  });
+  t.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); t.click(); }
+  });
+});
+ $$('.tm-chip[data-goto]').forEach(c => {
+  c.addEventListener('click', e => {
+    e.stopPropagation();
+    location.href = c.dataset.goto;
+  });
+});
+
+/* ---------- 6. misc ---------- */
+ $('#navCh').addEventListener('click', () => $('#inorganic').scrollIntoView({behavior:'smooth'}));
+ $('#toTop').addEventListener('click', () => scrollTo({top:0, behavior:'smooth'}));
+</script>
+</body>
+</html>
