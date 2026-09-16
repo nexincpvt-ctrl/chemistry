@@ -1,3 +1,26 @@
+
+function showToast(message) {
+    let toast = document.getElementById('custom-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'custom-toast';
+        toast.className = 'toast';
+        toast.innerHTML = `<div class="toast-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div><span class="toast-msg"></span>`;
+        document.body.appendChild(toast);
+    }
+    toast.querySelector('.toast-msg').textContent = message;
+    
+    // Reset animation if already showing
+    toast.classList.remove('show');
+    void toast.offsetWidth; // trigger reflow
+    toast.classList.add('show');
+    
+    if (window.toastTimeout) clearTimeout(window.toastTimeout);
+    window.toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
 /* ============================================================
    NEXINC — AUTH LOGIC
    ============================================================ */
@@ -9,18 +32,61 @@ function handleGoogleLoginGlobal(response) {
   window.dispatchEvent(event);
 }
 
-window.initGoogle = function () {
+function _doRenderGoogle() {
   const btn = document.getElementById('googleButtonContainer');
+  const fallback = document.getElementById('googleFallbackBtn');
   if (!btn) return;
+
   if (window.google) {
-    google.accounts.id.initialize({
-      client_id: '428240791571-o7vohrjlnbctiu3k0ap60cpb19psvg3u.apps.googleusercontent.com',
-      callback: handleGoogleLoginGlobal
+    try {
+      google.accounts.id.initialize({
+        client_id: '428240791571-o7vohrjlnbctiu3k0ap60cpb19psvg3u.apps.googleusercontent.com',
+        callback: handleGoogleLoginGlobal
+      });
+      google.accounts.id.renderButton(btn, {
+        theme: 'outline', size: 'large', width: 340,
+        shape: 'pill', logo_alignment: 'center'
+      });
+      // Check if SDK actually rendered something
+      setTimeout(() => {
+        if (btn.children.length === 0 && fallback) {
+          fallback.style.display = 'flex';
+        }
+      }, 1000);
+    } catch(e) {
+      // SDK error - show fallback
+      if (fallback) fallback.style.display = 'flex';
+    }
+  } else {
+    // No Google SDK - show fallback
+    if (fallback) fallback.style.display = 'flex';
+  }
+}
+
+// Called by fallback button
+function triggerGoogleLogin() {
+  if (window.google && window.google.accounts && window.google.accounts.id) {
+    google.accounts.id.prompt((notification) => {
+      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+        // One Tap blocked - show a message
+        if (typeof showToast === 'function') {
+          showToast('Please allow pop-ups for Google Sign-In or use email login.');
+        }
+      }
     });
-    google.accounts.id.renderButton(btn, {
-      theme: 'outline', size: 'large', width: 340,
-      shape: 'rectangular', logo_alignment: 'center'
-    });
+  } else {
+    if (typeof showToast === 'function') {
+      showToast('Google Sign-In not available. Please add your Vercel domain to Google Cloud Console.');
+    }
+  }
+}
+
+// Called by Google SDK ?onload= param - DOM may not be ready yet
+window.initGoogle = function () {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _doRenderGoogle);
+  } else {
+    _doRenderGoogle();
   }
 };
 
@@ -94,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (!response.ok) {
-                alert(data.error || 'Something went wrong');
+                showToast(data.error || 'Something went wrong');
                 submitBtn.innerHTML = originalBtnText;
                 submitBtn.disabled = false;
                 return;
@@ -111,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 2700);
         } catch (error) {
             console.error('Error:', error);
-            alert('Failed to connect to server');
+            showToast('Failed to connect to server');
             submitBtn.innerHTML = originalBtnText;
             submitBtn.disabled = false;
         }
@@ -121,6 +187,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.google) {
         window.initGoogle();
     }
+
+    // Guaranteed fallback: if Google button not rendered in 2 seconds, show our custom button
+    setTimeout(() => {
+        const container = document.getElementById('googleButtonContainer');
+        const fallback = document.getElementById('googleFallbackBtn');
+        if (container && fallback && container.children.length === 0) {
+            fallback.style.display = 'flex';
+        }
+    }, 2000);
 
     // Listen for Google login events dispatched by global handler
     window.addEventListener('google-login', async (e) => {
@@ -144,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             
             if (!res.ok) {
-                alert(data.error || 'Google login failed');
+                showToast(data.error || 'Google login failed');
                 return;
             }
             
@@ -158,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 2700);
         } catch (error) {
             console.error('Google login error:', error);
-            alert('Failed to connect to server for Google Login');
+            showToast('Failed to connect to server for Google Login');
         }
     }
 });

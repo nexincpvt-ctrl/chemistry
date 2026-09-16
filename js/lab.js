@@ -76,6 +76,32 @@ const compoundData = {
         ],
         "order": 1
       }
+    ],
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        1,
+        0,
+        2
+      ],
+      "text": "104.5°"
+    },
+    "hasLP": true,
+    "lps": [
+      {
+        "x": 0,
+        "y": 0.6,
+        "z": 0.4,
+        "rx": 0.5,
+        "rz": 0
+      },
+      {
+        "x": 0,
+        "y": 0.6,
+        "z": -0.4,
+        "rx": -0.5,
+        "rz": 0
+      }
     ]
   },
   "D2O": {
@@ -121,7 +147,16 @@ const compoundData = {
         ],
         "order": 1
       }
-    ]
+    ],
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        1,
+        0,
+        2
+      ],
+      "text": "104.5°"
+    }
   },
   "H2O2": {
     "sym": "H₂O₂",
@@ -179,7 +214,16 @@ const compoundData = {
         ],
         "order": 1
       }
-    ]
+    ],
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        2,
+        0,
+        1
+      ],
+      "text": "94.8°"
+    }
   },
   "LiH": {
     "sym": "LiH",
@@ -335,7 +379,16 @@ const compoundData = {
       }
     ]
   },
-  "CH4": { "hasAngle": true, "angleData": {"text": "109.5°"}, 
+  "CH4": {
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        1,
+        0,
+        2
+      ],
+      "text": "109.5°"
+    },
     "sym": "CH₄",
     "name": "METHANE",
     "hybrid": "sp³",
@@ -404,9 +457,29 @@ const compoundData = {
         ],
         "order": 1
       }
-    ]
+    ],
+    "hasLP": false
   },
-  "NH3": { "hasAngle": true, "hasLP": true, "angleData": {"text": "107°"}, "lps": [{"x":0, "y":1.0, "z":0, "rx":0, "rz":0}], 
+  "NH3": {
+    "hasAngle": true,
+    "hasLP": true,
+    "angleData": {
+      "nodes": [
+        1,
+        0,
+        2
+      ],
+      "text": "107°"
+    },
+    "lps": [
+      {
+        "x": 0,
+        "y": 0.8,
+        "z": 0,
+        "rx": 0,
+        "rz": 0
+      }
+    ],
     "sym": "NH₃",
     "name": "AMMONIA",
     "hybrid": "sp³",
@@ -493,6 +566,31 @@ const compoundData = {
           1
         ],
         "order": 1
+      }
+    ],
+    "hasAngle": false,
+    "hasLP": true,
+    "lps": [
+      {
+        "x": 0.8,
+        "y": 0.4,
+        "z": 0,
+        "rx": 0,
+        "rz": -0.5
+      },
+      {
+        "x": 0.8,
+        "y": -0.4,
+        "z": 0,
+        "rx": 0,
+        "rz": 0.5
+      },
+      {
+        "x": 0.8,
+        "y": 0,
+        "z": 0.4,
+        "rx": 0.5,
+        "rz": 0
       }
     ]
   },
@@ -611,7 +709,16 @@ const compoundData = {
         ],
         "order": 1
       }
-    ]
+    ],
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        2,
+        0,
+        3
+      ],
+      "text": "97°"
+    }
   },
   "H3O+": {
     "sym": "H₃O⁺",
@@ -669,7 +776,16 @@ const compoundData = {
         ],
         "order": 1
       }
-    ]
+    ],
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        1,
+        0,
+        2
+      ],
+      "text": "113°"
+    }
   },
   "OH-": {
     "sym": "OH⁻",
@@ -703,7 +819,16 @@ const compoundData = {
       }
     ]
   },
-  "C2H4": { "hasAngle": true, "angleData": {"text": "120°"}, 
+  "C2H4": {
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        2,
+        0,
+        1
+      ],
+      "text": "120°"
+    },
     "sym": "C₂H₄",
     "name": "ETHENE",
     "hybrid": "sp²",
@@ -787,7 +912,16 @@ const compoundData = {
       }
     ]
   },
-  "C2H2": { "hasAngle": true, "angleData": {"text": "180°"}, 
+  "C2H2": {
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        2,
+        0,
+        1
+      ],
+      "text": "180°"
+    },
     "sym": "C₂H₂",
     "name": "ETHYNE",
     "hybrid": "sp",
@@ -927,7 +1061,16 @@ const compoundData = {
         ],
         "order": 1
       }
-    ]
+    ],
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        0,
+        1,
+        5
+      ],
+      "text": "108.5°"
+    }
   },
   "C2H5OH": {
     "sym": "C₂H₅OH",
@@ -1050,7 +1193,16 @@ const compoundData = {
         ],
         "order": 1
       }
-    ]
+    ],
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        1,
+        2,
+        8
+      ],
+      "text": "108.5°"
+    }
   },
   "C3H8": {
     "sym": "C₃H₈",
@@ -1199,7 +1351,16 @@ const compoundData = {
         ],
         "order": 1
       }
-    ]
+    ],
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        0,
+        1,
+        2
+      ],
+      "text": "112°"
+    }
   },
   "CO": {
     "sym": "CO",
@@ -1276,6 +1437,207 @@ const compoundData = {
         ],
         "order": 2
       }
+    ],
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        0,
+        1,
+        2
+      ],
+      "text": "180°"
+    }
+  },
+  "H2S": {
+    "sym": "H₂S",
+    "name": "HYDROGEN SULFIDE",
+    "hybrid": "sp³",
+    "geom": "Bent",
+    "struct": "Covalent",
+    "desc": "Foul-smelling gas.",
+    "vis2D": "H-S-H",
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        1,
+        0,
+        2
+      ],
+      "text": "92.1°"
+    },
+    "hasLP": true,
+    "lps": [
+      {
+        "x": 0,
+        "y": 0.6,
+        "z": 0.4,
+        "rx": 0.5,
+        "rz": 0
+      },
+      {
+        "x": 0,
+        "y": 0.6,
+        "z": -0.4,
+        "rx": -0.5,
+        "rz": 0
+      }
+    ],
+    "atoms": [
+      {
+        "element": "S",
+        "x": 0,
+        "y": 0.2,
+        "z": 0
+      },
+      {
+        "element": "H",
+        "x": 0.8,
+        "y": -0.4,
+        "z": 0
+      },
+      {
+        "element": "H",
+        "x": -0.8,
+        "y": -0.4,
+        "z": 0
+      }
+    ],
+    "bonds": [
+      {
+        "nodes": [
+          0,
+          1
+        ],
+        "order": 1
+      },
+      {
+        "nodes": [
+          0,
+          2
+        ],
+        "order": 1
+      }
+    ]
+  },
+  "HCl": {
+    "sym": "HCl",
+    "name": "HYDROGEN CHLORIDE",
+    "hybrid": "sp³",
+    "geom": "Linear",
+    "struct": "Covalent (Polar)",
+    "desc": "Strong acid in water.",
+    "vis2D": "H-Cl",
+    "hasAngle": false,
+    "hasLP": true,
+    "lps": [
+      {
+        "x": 0.9,
+        "y": 0.4,
+        "z": 0,
+        "rx": 0,
+        "rz": -0.5
+      },
+      {
+        "x": 0.9,
+        "y": -0.4,
+        "z": 0,
+        "rx": 0,
+        "rz": 0.5
+      },
+      {
+        "x": 0.9,
+        "y": 0,
+        "z": 0.4,
+        "rx": 0.5,
+        "rz": 0
+      }
+    ],
+    "atoms": [
+      {
+        "element": "H",
+        "x": -0.6,
+        "y": 0,
+        "z": 0
+      },
+      {
+        "element": "Cl",
+        "x": 0.4,
+        "y": 0,
+        "z": 0
+      }
+    ],
+    "bonds": [
+      {
+        "nodes": [
+          0,
+          1
+        ],
+        "order": 1
+      }
+    ]
+  },
+  "HCN": {
+    "sym": "HCN",
+    "name": "HYDROGEN CYANIDE",
+    "hybrid": "sp",
+    "geom": "Linear",
+    "struct": "Covalent",
+    "desc": "Highly toxic liquid/gas.",
+    "vis2D": "H-C≡N",
+    "hasAngle": true,
+    "angleData": {
+      "nodes": [
+        0,
+        1,
+        2
+      ],
+      "text": "180°"
+    },
+    "hasLP": true,
+    "lps": [
+      {
+        "x": 1.5,
+        "y": 0,
+        "z": 0,
+        "rx": 0,
+        "rz": -1.57
+      }
+    ],
+    "atoms": [
+      {
+        "element": "H",
+        "x": -1.2,
+        "y": 0,
+        "z": 0
+      },
+      {
+        "element": "C",
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      {
+        "element": "N",
+        "x": 1,
+        "y": 0,
+        "z": 0
+      }
+    ],
+    "bonds": [
+      {
+        "nodes": [
+          0,
+          1
+        ],
+        "order": 1
+      },
+      {
+        "nodes": [
+          1,
+          2
+        ],
+        "order": 3
+      }
     ]
   }
 };
@@ -1325,6 +1687,8 @@ function animate() {
       moleculeGroup.rotation.y += 0.01;
       moleculeGroup.rotation.x += 0.005;
     }
+    // Bobbing animation
+    moleculeGroup.position.y = Math.sin(Date.now() * 0.0015) * 0.15;
     moleculeGroup.children.forEach(child => {
       if (child.userData && child.userData.radius && child.children.length > 0) {
         const sprite = child.children[0];
@@ -1452,10 +1816,61 @@ function drawMolecule() {
   }
 
     if (showAngle && data.angleData) {
-    const lbl = createTextSprite(data.angleData.text);
-    lbl.position.set(0, 0, 1.2);
-    lbl.scale.set(0.2, 0.2, 0.2);
-    moleculeGroup.add(lbl);
+    if (data.angleData.nodes) {
+      const pCenter = atomMeshes[data.angleData.nodes[1]];
+      const p1 = atomMeshes[data.angleData.nodes[0]];
+      const p2 = atomMeshes[data.angleData.nodes[2]];
+      
+      const v1 = new THREE.Vector3().subVectors(p1.position, pCenter.position).normalize();
+      const v2 = new THREE.Vector3().subVectors(p2.position, pCenter.position).normalize();
+      
+      // Calculate bisector for label position
+      let bisector = new THREE.Vector3().addVectors(v1, v2).normalize();
+      
+      // Handle 180 degree angles (Linear) where bisector would be 0
+      if (bisector.lengthSq() < 0.001) {
+          bisector = new THREE.Vector3(0, 1, 0).cross(v1).normalize();
+          if (bisector.lengthSq() < 0.001) {
+              bisector = new THREE.Vector3(1, 0, 0).cross(v1).normalize();
+          }
+      }
+      
+      const arcRadius = 0.6;
+      
+      // Draw Arc (only if not 180 degrees)
+      const angle = v1.angleTo(v2);
+      if (angle < Math.PI - 0.01) {
+          const curve = new THREE.EllipseCurve(
+            0, 0, arcRadius, arcRadius,
+            0, angle, false, 0
+          );
+          const points = curve.getPoints(20);
+          const geometry = new THREE.BufferGeometry().setFromPoints(points);
+          const material = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.6, linewidth: 2 });
+          const arcLine = new THREE.Line(geometry, material);
+          
+          // Align arc with the vectors
+          const normal = new THREE.Vector3().crossVectors(v1, v2).normalize();
+          // We need to construct a rotation matrix from the XY plane to the v1,v2 plane
+          const xAxis = v1.clone();
+          const yAxis = new THREE.Vector3().crossVectors(normal, xAxis).normalize();
+          const matrix = new THREE.Matrix4().makeBasis(xAxis, yAxis, normal);
+          
+          arcLine.applyMatrix4(matrix);
+          arcLine.position.copy(pCenter.position);
+          moleculeGroup.add(arcLine);
+      }
+      
+      // Add label
+      const lbl = createTextSprite(data.angleData.text);
+      lbl.position.copy(pCenter.position).add(bisector.multiplyScalar(arcRadius + 0.3));\n      lbl.scale.set(0.3, 0.3, 0.3);
+      moleculeGroup.add(lbl);
+    } else {
+      // Fallback if no nodes defined
+      const lbl = createTextSprite(data.angleData.text);
+      lbl.position.set(0, 1.0, 0);\n      lbl.scale.set(0.3, 0.3, 0.3);\n      lbl.scale.set(0.3, 0.3, 0.3);
+      moleculeGroup.add(lbl);
+    }
   }
 scene.add(moleculeGroup);
 }
