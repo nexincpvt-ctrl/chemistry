@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexInc · Group 16 · Chalcogens · ns² np⁴</title>
+
+<script>try{if(localStorage.getItem('nexinc-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/chalcogen.css">
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div class="progress" id="progress"></div>
+<div class="cur-dot"></div>
+<div class="cur-ring"></div>
+<div class="toast" id="toast"></div>
+
+<!-- ================= HEADER ================= -->
+<header class="site-head">
+  <a class="brand" href="dashboard.html" aria-label="NexInc home">
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <path d="M14 2 L24.5 8 V20 L14 26 L3.5 20 V8 Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M9.5 18.5 V9.5 L18.5 18.5 V9.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="21.5" cy="6.5" r="2.4" style="fill:var(--verm)"/>
+    </svg>
+    <span class="bname">Nex<em>Inc</em></span>
+  </a>
+  <a href="group16.html" class="mono" style="font-size: 11px; letter-spacing: 0.15em; margin-left: 20px; color: var(--ink-soft); transition: color 0.3s;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--ink-soft)'">← GROUP 16</a>
+  <span class="head-crumb mono">GROUP 16 · CHALCOGENS <i class="dm" style="background:var(--teal)"></i> ns² np⁴</span>
+  <div class="head-right">
+    <span class="mono head-tag">NEXINC · BENCH 00 · HQ</span>
+    <button class="user-btn" id="userBtn" aria-label="User profile"><i data-lucide="user-round"></i></button>
+    <button class="theme-btn" id="themeBtn" aria-label="Theme badlo">
+      <i data-lucide="sun" class="ic-sun"></i>
+      <i data-lucide="moon" class="ic-moon"></i>
+    </button>
+  </div>
+</header>
+
+<main>
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <p class="overline mono">NEXINC · GROUP 16 · BENCH 00 · HEADQUARTERS</p>
+    <h1 class="hero-h">
+      <span class="line">
+        <span class="w" style="--d:.05s">The</span> <span class="w circled" style="--d:.15s">Chalcogens<svg class="circ" viewBox="0 0 100 40" preserveAspectRatio="none"><path pathLength="1" d="M10 27 C 14 8, 90 3, 95 18 C 97 31, 32 39, 11 31 C 3 27, 7 15, 22 12"/></svg></span>
+      </span>
+      <span class="line"><span class="w" style="--d:.32s">ns²</span> <span class="w" style="--d:.42s">np⁴</span> <span class="w" style="--d:.52s">Family</span></span>
+    </h1>
+    <p class="hero-sub"><b>O · S · Se · Te · Po · Lv</b> — "ore-formers" · chhah elements, <b>6 valence electrons</b>, ek hi signature config. Element chuno → <b>3D Bohr atom</b> me shells khulengi — <b>electron counts EXACT data jaise</b>.</p>
+    <a href="#select" class="hint mono">6 ELEMENTS — EK CHUNO <i data-lucide="arrow-down"></i></a>
+  </section>
+
+  <!-- ================= MARQUEE ================= -->
+  <div class="marquee" aria-hidden="true">
+    <div class="mtrack">
+      <div class="mgroup">
+        <span>O · Z=8</span><i class="dm" style="background:var(--teal)"></i>
+        <span>S · Z=16</span><i class="dm" style="background:var(--gold)"></i>
+        <span>Se · Z=34</span><i class="dm" style="background:var(--verm)"></i>
+        <span>Te · Z=52</span><i class="dm" style="background:var(--amber)"></i>
+        <span>Po · Z=84 ☢</span><i class="dm" style="background:var(--green)"></i>
+        <span>Lv · Z=116</span><i class="dm" style="background:var(--purple)"></i>
+        <span>ns² np⁴ · 6 VAL e⁻</span><i class="dm" style="background:var(--blue)"></i>
+        <span>−2 · +2 · +4 · +6</span><i class="dm" style="background:var(--verm)"></i>
+        <span>O · Z=8</span><i class="dm" style="background:var(--teal)"></i>
+        <span>S · Z=16</span><i class="dm" style="background:var(--gold)"></i>
+        <span>Se · Z=34</span><i class="dm" style="background:var(--verm)"></i>
+        <span>Te · Z=52</span><i class="dm" style="background:var(--amber)"></i>
+        <span>Po · Z=84 ☢</span><i class="dm" style="background:var(--green)"></i>
+        <span>Lv · Z=116</span><i class="dm" style="background:var(--purple)"></i>
+        <span>ns² np⁴ · 6 VAL e⁻</span><i class="dm" style="background:var(--blue)"></i>
+        <span>−2 · +2 · +4 · +6</span><i class="dm" style="background:var(--verm)"></i>
+      </div>
+      <div class="mgroup">
+        <span>O · Z=8</span><i class="dm" style="background:var(--teal)"></i>
+        <span>S · Z=16</span><i class="dm" style="background:var(--gold)"></i>
+        <span>Se · Z=34</span><i class="dm" style="background:var(--verm)"></i>
+        <span>Te · Z=52</span><i class="dm" style="background:var(--amber)"></i>
+        <span>Po · Z=84 ☢</span><i class="dm" style="background:var(--green)"></i>
+        <span>Lv · Z=116</span><i class="dm" style="background:var(--purple)"></i>
+        <span>ns² np⁴ · 6 VAL e⁻</span><i class="dm" style="background:var(--blue)"></i>
+        <span>−2 · +2 · +4 · +6</span><i class="dm" style="background:var(--verm)"></i>
+        <span>O · Z=8</span><i class="dm" style="background:var(--teal)"></i>
+        <span>S · Z=16</span><i class="dm" style="background:var(--gold)"></i>
+        <span>Se · Z=34</span><i class="dm" style="background:var(--verm)"></i>
+        <span>Te · Z=52</span><i class="dm" style="background:var(--amber)"></i>
+        <span>Po · Z=84 ☢</span><i class="dm" style="background:var(--green)"></i>
+        <span>Lv · Z=116</span><i class="dm" style="background:var(--purple)"></i>
+        <span>ns² np⁴ · 6 VAL e⁻</span><i class="dm" style="background:var(--blue)"></i>
+        <span>−2 · +2 · +4 · +6</span><i class="dm" style="background:var(--verm)"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= STEP 01 · SELECT ================= -->
+  <section class="sec" id="select">
+    <p class="bench-kick mono">STEP 01 · ELEMENT CHUNO — CHHAAH READY</p>
+    <p class="bench-sub mono">CARD PE <b>CLICK</b> → 3D ATOM + DATA NICHE LIVE LOAD · SHELL e⁻ COUNTS = <b>EXACT</b></p>
+    <div class="picks" id="picks"></div>
+  </section>
+
+  <!-- ================= STEP 02 · 3D ATOM ================= -->
+  <section class="sec" id="atom">
+    <p class="bench-kick mono">STEP 02 · 3D BOHR ATOM — TRUE-SHELL MODE</p>
+    <p class="bench-sub mono">ABHI LOADED: <b id="selChip">O</b> · <b>DRAG</b> = ROTATE · <b>SCROLL/+−</b> = ZOOM · HAR SHELL KE e⁻ = REAL COUNT</p>
+
+    <div class="viewer">
+
+      <!-- ===== 3D STAGE ===== -->
+      <div class="panel stage3d" id="stage3d" style="--tc:var(--teal)">
+        <span class="panel-tag mono">3D · BOHR ATOM</span>
+        <div class="stage-head">
+          <b class="mname" id="mName">Oxygen <em>· O</em></b>
+          <span class="mshape" id="mShape">Z=8 · [He] 2s² 2p⁴</span>
+        </div>
+        <div class="viewport" id="viewport">
+          <canvas id="gl"></canvas>
+          <span class="vp-legend"><span class="ldot"></span> VALENCE SHELL · 6 e⁻ (ns² np⁴)</span>
+          <div class="vp-btns">
+            <button class="vp-btn" id="zin" aria-label="Zoom in"><i data-lucide="plus"></i></button>
+            <button class="vp-btn" id="zout" aria-label="Zoom out"><i data-lucide="minus"></i></button>
+            <button class="vp-btn" id="zreset" aria-label="Reset view"><i data-lucide="rotate-ccw"></i></button>
+          </div>
+          <span class="vp-hint"><i data-lucide="orbit"></i> DRAG · SCROLL ZOOM</span>
+          <div class="vp-fallback" id="vpFallback">3D ENGINE LOAD NAHI HUA<br>INTERNET CHECK KARKE REFRESH KARO</div>
+        </div>
+        <div class="tgls">
+          <button class="tgl on" id="tglRINGS" style="--tgreen:var(--teal)"><span class="led"></span>SHELL RINGS</button>
+          <button class="tgl" id="tglVAL" style="--tgreen:var(--verm)"><span class="led"></span>VALENCE ONLY</button>
+          <button class="tgl on" id="tglORB" style="--tgreen:var(--green)"><span class="led"></span>e⁻ ORBIT</button>
+          <button class="tgl on" id="tglSPIN" style="--tgreen:var(--blue)"><span class="led"></span>AUTO SPIN</button>
+        </div>
+      </div>
+
+      <!-- ===== DATA PANEL ===== -->
+      <div class="panel datacard" id="datacard" style="--tc:var(--teal)">
+        <span class="panel-tag mono">DATA · <span id="dTag">O</span></span>
+        <div class="data-head"><b id="dName">Oxygen</b><span>ELEMENT DATA</span></div>
+        <div class="drows" id="drows">
+          <div class="drow"><span class="dk">ATOMIC NUMBER</span><span class="dv" id="dZ">8</span></div>
+          <div class="drow"><span class="dk">ATOMIC MASS</span><span class="dv" id="dMass">15.999 u</span></div>
+          <div class="drow"><span class="dk">PERIOD · BLOCK</span><span class="dv" id="dPer">2 · p-block</span></div>
+          <div class="drow"><span class="dk">CONFIGURATION</span><span class="dv" id="dCfg">[He] 2s² 2p⁴</span></div>
+          <div class="drow"><span class="dk">SHELLS (K·L·M…)</span><span class="dv" id="dShell">2 · <span class="hl">6</span></span></div>
+          <div class="drow"><span class="dk">ELECTRONEGATIVITY</span><span class="dv" id="dEN">3.44</span></div>
+        </div>
+        <div class="dchips" id="dchips">
+          <span class="dchip"><b id="dState">GAS</b><span>STATE @ 25°C</span><i class="anotag" id="stTag">☢</i></span>
+          <span class="dchip"><b id="dRad">66 pm</b><span>COVALENT RADIUS</span></span>
+          <span class="dchip"><b id="dMetal">NON-METAL</b><span>CHARACTER</span></span>
+        </div>
+        <div class="dnote" id="dnote">
+          <span class="nk"><i data-lucide="info"></i>STRUCTURE NOTE</span>
+          <p id="dNote"><b>Anomalous O</b> — small size, no d-orbital</p>
+          <span class="nk second"><i data-lucide="zap"></i>JEE FACT</span>
+          <p id="dFact">O₂ diamagnetic (MO theory)</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===== GROUP PROFILE (user table) ===== -->
+    <div class="below">
+      <div class="panel profile" style="--tc:var(--teal)">
+        <span class="panel-tag mono">GROUP PROFILE · OFFICIAL DATA</span>
+        <h3>Chalcogens <em style="font-style:italic;color:var(--teal)">· Group 16</em></h3>
+        <p class="lsub">SAB PROPERTIES · EK JAGAH · BENCH 00 MASTER TABLE</p>
+        <div class="drows">
+          <div class="drow"><span class="dk">NAME</span><span class="dv">Chalcogens — <span style="color:var(--ink-soft);font-weight:500">"ore-formers" (Gr. chalcos = ore)</span></span></div>
+          <div class="drow"><span class="dk">GROUP</span><span class="dv">16 (VIA) · p-block</span></div>
+          <div class="drow"><span class="dk">ELEMENTS</span><span class="dv">O · S · Se · Te · Po · Lv</span></div>
+          <div class="drow"><span class="dk">GENERAL CONFIG</span><span class="dv mono"><span class="hl">ns² np⁴</span></span></div>
+          <div class="drow"><span class="dk">VALENCE ELECTRONS</span><span class="dv mono"><span class="hl">6</span></span></div>
+          <div class="drow"><span class="dk">OXIDATION STATES</span><span class="dv mono">−2 · +2 · +4 · +6 <span style="color:var(--ink-soft);font-weight:500">(O: sirf −2, −1, +2)</span></span></div>
+          <div class="drow"><span class="dk">COMMON HYDRIDES</span><span class="dv mono">H₂O · H₂S · H₂Se · H₂Te · H₂Po</span></div>
+          <div class="drow"><span class="dk">COMMON OXIDES</span><span class="dv mono">SO₂ · SO₃ · SeO₂ · SeO₃ · TeO₂ · TeO₃</span></div>
+          <div class="drow"><span class="dk">COMMON HALIDES</span><span class="dv mono">EX₂ · EX₄ · EX₆</span></div>
+          <div class="drow"><span class="dk">COMMON OXOACIDS</span><span class="dv mono">H₂SO₃ · H₂SO₄ · H₂SeO₃ · H₂SeO₄</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TRENDS ================= -->
+  <section class="sec" id="trends">
+    <p class="bench-kick mono">DOWN-THE-GROUP TRENDS · O → PO</p>
+    <p class="bench-sub mono">ARROW = NICHE JAATE HUE <b>BADLAV</b> · VALUES REAL DATA</p>
+    <div class="trendwrap">
+      <div class="trendgrid" id="trendGrid"></div>
+      <div class="anomaly">
+        <i data-lucide="alert-triangle"></i>
+        <p><b>⚠ ANOMALY:</b> O ka electron-gain enthalpy S se <b>kam negative</b> hai — chhote atom me added e⁻ ka repulsion zyada · isi liye O sirf <b>−2</b> dikhata hai (+1 peroxides, +2 sirf OF₂/F₂O) · O me <b>no d-orbital</b> → max covalency 2, no +4/+6</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= HUB ================= -->
+  <section class="sec" id="hub">
+    <p class="bench-kick mono">DERIVATIVES · BENCH NETWORK</p>
+    <p class="bench-sub mono">GROUP 16 KE <b>SAB PAGES</b> · BENCH 00 SE LINKED</p>
+    <div class="hubwrap">
+      <div class="hubgrid" id="hubGrid">
+        <a class="hubcard" style="--tc:var(--blue)" href="hydrides.html">
+          <span class="hicon"><i data-lucide="droplets"></i></span>
+          <span class="hbody"><span class="ht">H₂E Hydrides</span><span class="hs">BENCH 01 · 4 READY · 104.5° → 90°</span></span>
+          <span class="hgo"><i data-lucide="arrow-right"></i></span>
+        </a>
+        <a class="hubcard" style="--tc:var(--green)" href="oxides.html">
+          <span class="hicon"><i data-lucide="flame"></i></span>
+          <span class="hbody"><span class="ht">EO₂ / EO₃ Oxides</span><span class="hs">BENCH 02 · 6 READY · TRUE-ANGLE 3D</span></span>
+          <span class="hgo"><i data-lucide="arrow-right"></i></span>
+        </a>
+        <button class="hubcard soon" style="--tc:var(--amber)" data-soon="HALIDES">
+          <span class="hicon"><i data-lucide="hexagon"></i></span>
+          <span class="hbody"><span class="ht">EX₂ / EX₄ / EX₆ Halides</span><span class="hs">BENCH 03 · BANNA BAAKI HAI</span></span>
+          <span class="hgo"><i data-lucide="lock"></i></span>
+        </button>
+        <button class="hubcard soon" style="--tc:var(--purple)" data-soon="OXOACIDS">
+          <span class="hicon"><i data-lucide="flask-conical"></i></span>
+          <span class="hbody"><span class="ht">Oxoacids · H₂SO₄ family</span><span class="hs">BENCH 04 · BANNA BAAKI HAI</span></span>
+          <span class="hgo"><i data-lucide="lock"></i></span>
+        </button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="site-foot">
+  <span class="mono">© 2025 NEXINC · GROUP 16 · BENCH 00 — HQ</span>
+  <span class="mono">6 ELEMENTS · TRUE SHELLS · SELECT · DRAG · TOGGLE</span>
+  <div class="foot-btns">
+    <button class="top-btn mono" id="hubBtn">DERIVATIVES ↓</button>
+    <button class="top-btn mono" id="toTop">TOP <i data-lucide="arrow-up"></i></button>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/chalcogen.js"></script>
+</body>
+</html>

@@ -16,8 +16,8 @@
 <body>
 <script>
   // Show intro only once per browser session (not every refresh)
-  if (!sessionStorage.getItem('intro_seen')) {
-    sessionStorage.setItem('intro_seen', '1');
+  if (!localStorage.getItem('intro_seen')) {
+    localStorage.setItem('intro_seen', '1');
     window.location.replace('intro.html');
   }
 </script>
@@ -118,3 +118,4 @@
 <script src="js/auth.js"></script>
 </body>
 </html>
+
