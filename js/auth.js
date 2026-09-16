@@ -157,7 +157,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(body)
             });
 
-            const data = await response.json();
+            let data;
+            try {
+                data = await response.json();
+            } catch (jsonError) {
+                console.error('JSON Parse Error:', jsonError);
+                showToast(`Server Error: Invalid response (HTTP ${response.status}). Is backend running?`);
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+                return;
+            }
 
             if (!response.ok) {
                 showToast(data.error || 'Something went wrong');
@@ -208,17 +217,24 @@ document.addEventListener('DOMContentLoaded', () => {
         window._pendingGoogleResponse = null;
     }
 
-    async function handleGoogleLogin(response) {
+    async function handleGoogleLogin(responseObj) {
         try {
-            const res = await fetch('/api/google-login', {
+            const response = await fetch('/api/google-login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token: response.credential })
+                body: JSON.stringify({ token: responseObj.credential })
             });
-            
-            const data = await res.json();
-            
-            if (!res.ok) {
+
+            let data;
+            try {
+                data = await response.json();
+            } catch (jsonError) {
+                console.error('JSON Parse Error:', jsonError);
+                showToast(`Google Auth Server Error (HTTP ${response.status}). Is backend running?`);
+                return;
+            }
+
+            if (!response.ok) {
                 showToast(data.error || 'Google login failed');
                 return;
             }
