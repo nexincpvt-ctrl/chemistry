@@ -1722,6 +1722,35 @@ function createTextSprite(message) {
   return sprite;
 }
 
+function createAngleSprite(message) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 256;
+  canvas.height = 128;
+  const context = canvas.getContext('2d');
+  context.font = "Bold 60px 'Space Grotesk', sans-serif";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  
+  // Draw outline
+  context.strokeStyle = "rgba(0,0,0,0.9)";
+  context.lineWidth = 6;
+  context.strokeText(message, 128, 64);
+  
+  // Draw inner text
+  context.fillStyle = "#ffb142"; // Bright yellow-orange
+  context.fillText(message, 128, 64);
+  
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.minFilter = THREE.LinearFilter;
+  const spriteMaterial = new THREE.SpriteMaterial({ map: texture, sizeAttenuation: true, depthTest: false });
+  const sprite = new THREE.Sprite(spriteMaterial);
+  
+  // Scale it specifically for world coordinates
+  sprite.scale.set(1.0, 0.5, 1.0);
+  
+  return sprite;
+}
+
 function createCylinder(pos1, pos2, material, radius = 0.06) {
   const distance = pos1.distanceTo(pos2);
   const geometry = new THREE.CylinderGeometry(radius, radius, distance, 16);
@@ -1848,7 +1877,8 @@ function drawMolecule() {
           );
           const points = curve.getPoints(20);
           const geometry = new THREE.BufferGeometry().setFromPoints(points);
-          const material = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.6, linewidth: 2 });
+          // Bright yellow arc, opaque for better visibility
+          const material = new THREE.LineBasicMaterial({ color: 0xffb142, linewidth: 3 });
           const arcLine = new THREE.Line(geometry, material);
           
           // Align arc with the vectors
@@ -1864,16 +1894,13 @@ function drawMolecule() {
       }
       
       // Add label
-      const lbl = createTextSprite(data.angleData.text);
-      lbl.position.copy(pCenter).add(bisector.multiplyScalar(arcRadius + 0.3));;
-      lbl.scale.set(0.3, 0.3, 0.3);
+      const lbl = createAngleSprite(data.angleData.text);
+      lbl.position.copy(pCenter).add(bisector.multiplyScalar(arcRadius + 0.3));
       moleculeGroup.add(lbl);
     } else {
       // Fallback if no nodes defined
-      const lbl = createTextSprite(data.angleData.text);
-      lbl.position.set(0, 1.0, 0);;
-      lbl.scale.set(0.3, 0.3, 0.3);;
-      lbl.scale.set(0.3, 0.3, 0.3);
+      const lbl = createAngleSprite(data.angleData.text);
+      lbl.position.set(0, 1.0, 0);
       moleculeGroup.add(lbl);
     }
   }
@@ -1915,8 +1942,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const canvas = renderer.domElement;
       canvas.style.display = 'block';
       
-      const existing2D = renderArea.querySelector('.lewis-text');
-      if(existing2D) existing2D.remove();
+      const existing2Ds = renderArea.querySelectorAll('.lewis-text');
+      existing2Ds.forEach(el => el.remove());
       
       drawMolecule();
     } else {
@@ -1927,10 +1954,11 @@ document.addEventListener('DOMContentLoaded', () => {
         moleculeGroup = null;
       }
       
-      const existing2D = renderArea.querySelector('.lewis-text');
-      if(existing2D) existing2D.remove();
+      const existing2Ds = renderArea.querySelectorAll('.lewis-text');
+      existing2Ds.forEach(el => el.remove());
       
       const div2d = document.createElement('div');
+      div2d.className = 'lewis-text';
       div2d.innerHTML = data.vis2D;
       div2d.style.position = 'absolute';
       renderArea.appendChild(div2d);

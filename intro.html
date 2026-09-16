@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexInc · Welcome</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F6F1E7;
+    --ink: #1E2420;
+    --ink-soft: #5A625B;
+    --grid: rgba(30, 36, 32, 0.055);
+    --green: #2E7D52;
+    --verm: #C94F2E;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    overflow: hidden;
+    font-family: 'Space Grotesk', sans-serif;
+    height: 100vh; width: 100vw;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Background Grid ── */
+  #bg-grid {
+    position: fixed; inset: 0; z-index: 0;
+    background-image: 
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 38px 38px;
+    background-position: center center;
+    transform: perspective(500px) rotateX(60deg) translateY(-100px) scale(3);
+    animation: gridMove 10s linear infinite;
+    opacity: 0;
+    transition: opacity 2s ease;
+  }
+  
+  @keyframes gridMove {
+    0% { background-position: center 0; }
+    100% { background-position: center 38px; }
+  }
+
+  /* ── Scene Containers ── */
+  .scene {
+    position: fixed; inset: 0; z-index: 10;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: scale(0.95);
+  }
+  .scene.active {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .scene.exit {
+    opacity: 0;
+    transform: scale(1.05);
+    filter: blur(8px);
+  }
+
+  /* ── Scene 1: Creator ── */
+  .s1-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 4px;
+    color: var(--green); text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.8s ease 0.3s;
+  }
+  
+  .avatar-wrap {
+    position: relative;
+    width: 140px; height: 140px;
+    margin-bottom: 20px;
+  }
+  
+  .avatar-ring {
+    position: absolute; inset: -15px;
+    border: 1px solid rgba(46, 125, 82, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--green);
+    animation: spin 3s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+    opacity: 0; transform: scale(0.5);
+    transition: all 1.5s ease 0.6s;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .avatar-img {
+    width: 140px; height: 140px;
+    border-radius: 50%; object-fit: cover;
+    border: 3px solid var(--paper);
+    position: relative; z-index: 2;
+    opacity: 0; transform: scale(0.8);
+    transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s;
+    box-shadow: 0 10px 40px rgba(30,36,32,0.15);
+  }
+
+  .creator-name {
+    font-family: 'Fraunces', serif;
+    font-size: 48px; font-weight: 700;
+    letter-spacing: -1px;
+    color: var(--ink);
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.8s ease 0.8s;
+  }
+  
+  .creator-email {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--ink-soft);
+    margin-top: 8px;
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.8s ease 1.0s;
+  }
+
+  .scene.active .s1-label,
+  .scene.active .creator-name,
+  .scene.active .creator-email {
+    opacity: 1; transform: translateY(0);
+  }
+  .scene.active .avatar-img {
+    opacity: 1; transform: scale(1);
+  }
+  .scene.active .avatar-ring {
+    opacity: 1;
+  }
+
+  /* ── Scene 2: Company ── */
+  #scene2 {
+    gap: 0;
+  }
+  
+  .logo-svg {
+    width: 80px; height: 80px;
+    margin-bottom: 24px;
+    opacity: 0; transform: translateY(20px) scale(0.9);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s;
+  }
+  .logo-svg path {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset 1.5s ease 0.4s;
+  }
+  .logo-svg circle {
+    transform: scale(0);
+    transform-origin: 21.5px 6.5px;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 1.2s;
+  }
+  
+  .scene.active .logo-svg {
+    opacity: 1; transform: translateY(0) scale(1);
+  }
+  .scene.active .logo-svg path { stroke-dashoffset: 0; }
+  .scene.active .logo-svg circle { transform: scale(1); }
+
+  .company-title {
+    font-family: 'Fraunces', serif;
+    font-size: 84px; font-weight: 800;
+    letter-spacing: -3px; line-height: 1;
+    display: flex; overflow: hidden;
+    padding: 10px;
+    color: var(--ink);
+  }
+  .char {
+    opacity: 0; transform: translateY(40px) rotate(10deg);
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .char.em { color: var(--green); font-style: italic; }
+  
+  .tagline {
+    font-size: 14px; letter-spacing: 6px;
+    text-transform: uppercase; color: var(--ink-soft);
+    margin-top: 20px;
+    opacity: 0;
+    transition: opacity 1s ease 1.2s;
+  }
+  
+  .scene.active .tagline { opacity: 1; }
+
+  /* ── Scene 3: Terminal / Loading ── */
+  .terminal-box {
+    width: 440px;
+    background: #FFFDF8;
+    border: 1px solid rgba(30, 36, 32, 0.1);
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 20px 60px rgba(30, 36, 32, 0.08);
+  }
+  
+  .t-body {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--ink-soft);
+    line-height: 2;
+  }
+  .t-line {
+    display: flex; gap: 12px;
+    opacity: 0; transform: translateX(-10px);
+  }
+  .t-line span.green { color: var(--green); font-weight: bold; }
+  
+  .progress-wrap {
+    margin-top: 32px;
+    height: 4px; background: rgba(30, 36, 32, 0.06);
+    border-radius: 2px; overflow: hidden;
+    position: relative;
+  }
+  .progress-bar {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 0%;
+    background: var(--green);
+    transition: width 0.1s linear;
+  }
+
+  /* Flash */
+  #flash {
+    position: fixed; inset: 0; z-index: 999;
+    background: var(--paper);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+</style>
+</head>
+<body>
+
+<div id="bg-grid"></div>
+
+<!-- SCENE 1: CREATOR -->
+<div class="scene" id="scene1">
+  <div class="s1-label">A Vision By</div>
+  <div class="avatar-wrap">
+    <div class="avatar-ring"></div>
+    <img class="avatar-img" src="images/avatar-generated-light.jpg" alt="Lakshay" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'140\' height=\'140\'%3E%3Ccircle cx=\'70\' cy=\'70\' r=\'70\' fill=\'%23F6F1E7\'/%3E%3Ctext x=\'70\' y=\'88\' text-anchor=\'middle\' font-size=\'60\' font-family=\'serif\' fill=\'%232E7D52\'%3EL%3C/text%3E%3C/svg%3E'">
+  </div>
+  <div class="creator-name">Lakshay</div>
+  <div class="creator-email">bishnoilakshay822@gmail.com</div>
+</div>
+
+<!-- SCENE 2: NEXINC -->
+<div class="scene" id="scene2">
+  <svg class="logo-svg" viewBox="0 0 28 28" fill="none">
+    <path d="M14 2 L24.5 8 V20 L14 26 L3.5 20 V8 Z" stroke="#1E2420" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M9.5 18.5 V9.5 L18.5 18.5 V9.5" stroke="#1E2420" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="21.5" cy="6.5" r="2.4" fill="#C94F2E"/>
+  </svg>
+  
+  <div class="company-title" id="nexincTitle">
+    <!-- Letters injected by JS -->
+  </div>
+  <div class="tagline">Visual Chemistry Platform</div>
+</div>
+
+<!-- SCENE 3: TERMINAL / LOADING -->
+<div class="scene" id="scene3">
+  <div class="terminal-box">
+    <div class="t-body">
+      <div class="t-line" id="tl1"><span class="green">✔</span> Requesting lab clearance...</div>
+      <div class="t-line" id="tl2"><span class="green">✔</span> Verifying identity for LAKSHAY...</div>
+      <div class="t-line" id="tl3"><span class="green">✔</span> Clearance level: <span style="color:#C94F2E; font-weight:bold;">AUTHORIZED</span></div>
+      <div class="t-line" id="tl4"><span class="green">✔</span> Opening secure laboratory doors...</div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-bar" id="pBar"></div>
+    </div>
+  </div>
+</div>
+
+<div id="flash"></div>
+
+<script>
+  const sleep = (ms) => new Promise(res => setTimeout(res, ms));
+
+  // Split text for animation
+  const title = "NexInc";
+  const titleDiv = document.getElementById('nexincTitle');
+  title.split('').forEach((char, i) => {
+    const span = document.createElement('span');
+    span.className = 'char' + (i >= 3 ? ' em' : '');
+    span.innerHTML = char;
+    // Delay each letter slightly
+    span.style.transitionDelay = `${0.6 + (i * 0.08)}s`;
+    titleDiv.appendChild(span);
+  });
+
+  async function playIntro() {
+    // Show grid
+    document.getElementById('bg-grid').style.opacity = '1';
+
+    // SCENE 1
+    const s1 = document.getElementById('scene1');
+    s1.classList.add('active');
+    
+    await sleep(3500); // Wait 3.5s
+    s1.classList.remove('active');
+    s1.classList.add('exit');
+    await sleep(600); // Wait for exit animation
+
+    // SCENE 2
+    const s2 = document.getElementById('scene2');
+    s2.classList.add('active');
+    
+    // Trigger letter animations
+    document.querySelectorAll('.char').forEach(c => {
+      c.style.opacity = '1';
+      c.style.transform = 'translateY(0) rotate(0deg)';
+    });
+
+    await sleep(3500);
+    s2.classList.remove('active');
+    s2.classList.add('exit');
+    await sleep(600);
+
+    // SCENE 3
+    const s3 = document.getElementById('scene3');
+    s3.classList.add('active');
+
+    await sleep(500);
+    
+    // Animate terminal lines
+    const lines = [
+      { id: 'tl1', delay: 400 },
+      { id: 'tl2', delay: 600 },
+      { id: 'tl3', delay: 500 },
+      { id: 'tl4', delay: 700 }
+    ];
+    
+    for (let l of lines) {
+      const el = document.getElementById(l.id);
+      el.style.opacity = '1';
+      el.style.transform = 'translateX(0)';
+      el.style.transition = 'all 0.4s ease';
+      await sleep(l.delay);
+    }
+
+    // Fast progress bar
+    const pBar = document.getElementById('pBar');
+    pBar.style.width = '30%';
+    await sleep(400);
+    pBar.style.width = '70%';
+    await sleep(300);
+    pBar.style.width = '100%';
+    await sleep(200);
+
+    // Flash & Redirect
+    document.getElementById('flash').style.opacity = '1';
+    await sleep(600);
+    window.location.href = 'index.html';
+  }
+
+  // Start sequence
+  window.onload = () => {
+    setTimeout(playIntro, 100);
+  };
+</script>
+</body>
+</html>

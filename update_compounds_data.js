@@ -112,18 +112,18 @@ fs.writeFileSync('js/lab.js', js2);
 // Update HTML sidebar
 let html = fs.readFileSync('hydrogen.html', 'utf8');
 
-const newItems = '      <div class="comp-item" data-comp="H2S">\\n' +
-'        <div class="comp-item-sym">H₂S</div>\\n' +
-'        <div class="comp-item-name">HYDROGEN SULFIDE</div>\\n' +
-'      </div>\\n' +
-'      <div class="comp-item" data-comp="HCl">\\n' +
-'        <div class="comp-item-sym">HCl</div>\\n' +
-'        <div class="comp-item-name">HYDROGEN CHLORIDE</div>\\n' +
-'      </div>\\n' +
-'      <div class="comp-item" data-comp="HCN">\\n' +
-'        <div class="comp-item-sym">HCN</div>\\n' +
-'        <div class="comp-item-name">HYDROGEN CYANIDE</div>\\n' +
-'      </div>\\n';
+const newItems = '      <div class="comp-item" data-comp="H2S">\n' +
+'        <div class="comp-item-sym">H₂S</div>\n' +
+'        <div class="comp-item-name">HYDROGEN SULFIDE</div>\n' +
+'      </div>\n' +
+'      <div class="comp-item" data-comp="HCl">\n' +
+'        <div class="comp-item-sym">HCl</div>\n' +
+'        <div class="comp-item-name">HYDROGEN CHLORIDE</div>\n' +
+'      </div>\n' +
+'      <div class="comp-item" data-comp="HCN">\n' +
+'        <div class="comp-item-sym">HCN</div>\n' +
+'        <div class="comp-item-name">HYDROGEN CYANIDE</div>\n' +
+'      </div>\n';
 
 html = html.replace('      <div class="comp-item" data-comp="CO2">', newItems + '      <div class="comp-item" data-comp="CO2">');
 fs.writeFileSync('hydrogen.html', html);

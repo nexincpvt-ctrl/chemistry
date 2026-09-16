@@ -14,6 +14,13 @@
 <link rel="stylesheet" href="css/auth.css">
 </head>
 <body>
+<script>
+  // Show intro only once per browser session (not every refresh)
+  if (!sessionStorage.getItem('intro_seen')) {
+    sessionStorage.setItem('intro_seen', '1');
+    window.location.replace('intro.html');
+  }
+</script>
 
 <canvas id="bg"></canvas>
 <div class="cur-dot"></div>

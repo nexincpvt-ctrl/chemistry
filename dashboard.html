@@ -233,6 +233,10 @@ html[data-theme="dark"] .ic-sun{opacity:0;transform:rotate(90deg) scale(0)}
 .tm-head span{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;color:var(--ink-soft);border:1px solid var(--line);border-radius:999px;padding:3px 9px;background:var(--chipbg)}
 
 .tm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;flex:1;min-height:0}
+.tm-grid.t1{grid-template-columns:1fr;align-content:stretch;grid-template-rows:1fr}
+.tm-grid.t1 .tm-chip{justify-content:center;align-items:center;text-align:center;padding:24px}
+.tm-grid.t1 .tm-chip b{font-size:16px}
+.tm-grid.t1 .tm-chip span{font-size:12px}
 .tm-chip{
   position:relative;
   border:1.5px solid var(--line);border-radius:11px;
