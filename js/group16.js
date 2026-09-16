@@ -218,10 +218,13 @@ function showToast(msg){
   toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2100);
 }
  $$('.tile').forEach(t => {
-  t.addEventListener('click', () => {
+    t.addEventListener('click', () => {
     t.classList.add('pressing');
-    setTimeout(() => t.classList.remove('pressing'), 320);
-    showToast((t.dataset.name || 'YEH SECTION') + ' — DETAIL PAGE JALD');
+    setTimeout(() => {
+      t.classList.remove('pressing');
+      if (t.dataset.goto) location.href = t.dataset.goto;
+    }, 320);
+    if (!t.dataset.goto) showToast((t.dataset.name || 'YEH SECTION') + ' - DETAIL PAGE JALD');
   });
   t.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); t.click(); }
@@ -239,4 +242,5 @@ function showToast(msg){
   else location.href = 'dashboard.html';
 });
  $('#toTop').addEventListener('click', () => scrollTo({top:0, behavior:'smooth'}));
+
 
