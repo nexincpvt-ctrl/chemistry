@@ -1,5 +1,5 @@
-const atomColors = {"H":14737632,"D":16766287,"O":16729943,"M":3621626,"Li":10233776,"Na":6765239,"Ca":4149685,"Mg":2201331,"C":2962486,"N":623843,"F":52937,"B":16632686};
-const atomRadii = {"H":0.35,"D":0.35,"O":0.45,"M":0.65,"Li":0.6,"Na":0.65,"Ca":0.7,"Mg":0.65,"C":0.5,"N":0.45,"F":0.4,"B":0.55};
+const atomColors = {"H":14737632,"D":16766287,"O":16729943,"M":3621626,"Li":10233776,"Na":6765239,"Ca":4149685,"Mg":2201331,"C":2962486,"N":623843,"F":52937,"B":16632686,"S":15792399,"Cl":3394611};
+const atomRadii = {"H":0.35,"D":0.35,"O":0.45,"M":0.65,"Li":0.6,"Na":0.65,"Ca":0.7,"Mg":0.65,"C":0.5,"N":0.45,"F":0.4,"B":0.55,"S":0.6,"Cl":0.55};
 const compoundData = {
   "H2": {
     "sym": "H₂",
@@ -1779,13 +1779,15 @@ function drawMolecule() {
   const atomMeshes = [];
 
   data.atoms.forEach(atom => {
-    const geo = new THREE.SphereGeometry(atomRadii[atom.element], 32, 32);
+    const color = atomColors[atom.element] || 0xaaaaaa;
+    const radius = atomRadii[atom.element] || 0.4;
+    const geo = new THREE.SphereGeometry(radius, 32, 32);
     const mat = new THREE.MeshPhongMaterial({ 
-      color: atomColors[atom.element], 
+      color: color, 
       shininess: 80 
     });
     const sphere = new THREE.Mesh(geo, mat);
-    sphere.userData.radius = atomRadii[atom.element];
+    sphere.userData.radius = radius;
     sphere.position.set(atom.x, atom.y, atom.z);
     
     const label = createTextSprite(atom.element);
@@ -1821,8 +1823,8 @@ function drawMolecule() {
       const p1 = atomMeshes[data.angleData.nodes[0]];
       const p2 = atomMeshes[data.angleData.nodes[2]];
       
-      const v1 = new THREE.Vector3().subVectors(p1.position, pCenter.position).normalize();
-      const v2 = new THREE.Vector3().subVectors(p2.position, pCenter.position).normalize();
+      const v1 = new THREE.Vector3().subVectors(p1, pCenter).normalize();
+      const v2 = new THREE.Vector3().subVectors(p2, pCenter).normalize();
       
       // Calculate bisector for label position
       let bisector = new THREE.Vector3().addVectors(v1, v2).normalize();
@@ -1857,18 +1859,21 @@ function drawMolecule() {
           const matrix = new THREE.Matrix4().makeBasis(xAxis, yAxis, normal);
           
           arcLine.applyMatrix4(matrix);
-          arcLine.position.copy(pCenter.position);
+          arcLine.position.copy(pCenter);
           moleculeGroup.add(arcLine);
       }
       
       // Add label
       const lbl = createTextSprite(data.angleData.text);
-      lbl.position.copy(pCenter.position).add(bisector.multiplyScalar(arcRadius + 0.3));\n      lbl.scale.set(0.3, 0.3, 0.3);
+      lbl.position.copy(pCenter).add(bisector.multiplyScalar(arcRadius + 0.3));;
+      lbl.scale.set(0.3, 0.3, 0.3);
       moleculeGroup.add(lbl);
     } else {
       // Fallback if no nodes defined
       const lbl = createTextSprite(data.angleData.text);
-      lbl.position.set(0, 1.0, 0);\n      lbl.scale.set(0.3, 0.3, 0.3);\n      lbl.scale.set(0.3, 0.3, 0.3);
+      lbl.position.set(0, 1.0, 0);;
+      lbl.scale.set(0.3, 0.3, 0.3);;
+      lbl.scale.set(0.3, 0.3, 0.3);
       moleculeGroup.add(lbl);
     }
   }

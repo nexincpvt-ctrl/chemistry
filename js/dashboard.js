@@ -20,7 +20,8 @@ function showToast(message) {
         toast.classList.remove('show');
     }, 3000);
 }
-\ndocument.addEventListener('DOMContentLoaded', () => {
+
+document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('token');
   let user = JSON.parse(localStorage.getItem('user'));
 
