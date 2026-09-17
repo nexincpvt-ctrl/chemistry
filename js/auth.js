@@ -83,10 +83,28 @@ function triggerGoogleLogin() {
 
 // Called by Google SDK ?onload= param - DOM may not be ready yet
 window.initGoogle = function () {
+  const init = () => {
+    const panel = document.querySelector('.auth-panel');
+    if (panel) {
+      let animated = false;
+      const render = () => {
+        if (!animated) {
+          animated = true;
+          _doRenderGoogle();
+        }
+      };
+      panel.addEventListener('animationend', render);
+      // Fallback timeout in case animation already finished or fails
+      setTimeout(render, 850); 
+    } else {
+      _doRenderGoogle();
+    }
+  };
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', _doRenderGoogle);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    _doRenderGoogle();
+    init();
   }
 };
 
