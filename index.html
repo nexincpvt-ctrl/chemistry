@@ -16,8 +16,8 @@
 <body>
 <script>
   // Show intro only once per browser session (not every refresh)
-  if (!localStorage.getItem('intro_seen')) {
-    localStorage.setItem('intro_seen', '1');
+  if (!localStorage.getItem('intro_seen_v2')) {
+    localStorage.setItem('intro_seen_v2', '1');
     window.location.replace('intro.html');
   }
 </script>

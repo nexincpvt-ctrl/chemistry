@@ -52,22 +52,10 @@ function _doRenderGoogle() {
       });
       if (fallback) fallback.style.display = 'none';
       
-      // Check if SDK actually rendered something
-      setTimeout(() => {
-        if (btn.children.length === 0 && fallback) {
-          fallback.style.display = 'flex';
-          window.googleInitialized = false; // Reset if failed
-        }
-      }, 1000);
     } catch(e) {
-      // SDK error - show fallback
-      if (fallback) fallback.style.display = 'flex';
       window.googleInitialized = false;
-      console.error(e);
+      console.error('Google SDK initialization failed:', e);
     }
-  } else {
-    // No Google SDK - show fallback
-    if (fallback) fallback.style.display = 'flex';
   }
 }
 
@@ -94,7 +82,6 @@ window.initGoogle = function () {
   const init = () => {
     const panel = document.querySelector('.auth-panel');
     if (panel) {
-      // If page has been loading for more than 1 second, animation is likely done.
       if (performance.now() > 1000) {
         _doRenderGoogle();
         return;
@@ -108,7 +95,6 @@ window.initGoogle = function () {
         }
       };
       panel.addEventListener('animationend', render);
-      // Fallback timeout in case animation already finished or fails
       setTimeout(render, 850); 
     } else {
       _doRenderGoogle();
@@ -124,6 +110,13 @@ window.initGoogle = function () {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    const panel = document.querySelector('.auth-panel');
+    if (panel) {
+        panel.addEventListener('animationend', () => {
+            panel.style.transform = 'none';
+        }, { once: true });
+    }
+    
     const formTitle = document.getElementById('formTitle');
     const formSub = document.getElementById('formSub');
     const nameGroup = document.getElementById('nameGroup');
@@ -228,15 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.google) {
         window.initGoogle();
     }
-
-    // Guaranteed fallback: if Google button not rendered in 2 seconds, show our custom button
-    setTimeout(() => {
-        const container = document.getElementById('googleButtonContainer');
-        const fallback = document.getElementById('googleFallbackBtn');
-        if (container && fallback && container.children.length === 0) {
-            fallback.style.display = 'flex';
-        }
-    }, 2000);
 
     // Listen for Google login events dispatched by global handler
     window.addEventListener('google-login', async (e) => {

@@ -260,21 +260,6 @@
   <div class="tagline">Visual Chemistry Platform</div>
 </div>
 
-<!-- SCENE 3: TERMINAL / LOADING -->
-<div class="scene" id="scene3">
-  <div class="terminal-box">
-    <div class="t-body">
-      <div class="t-line" id="tl1"><span class="green">✔</span> Requesting lab clearance...</div>
-      <div class="t-line" id="tl2"><span class="green">✔</span> Verifying identity for LAKSHAY...</div>
-      <div class="t-line" id="tl3"><span class="green">✔</span> Clearance level: <span style="color:#C94F2E; font-weight:bold;">AUTHORIZED</span></div>
-      <div class="t-line" id="tl4"><span class="green">✔</span> Opening secure laboratory doors...</div>
-    </div>
-    <div class="progress-wrap">
-      <div class="progress-bar" id="pBar"></div>
-    </div>
-  </div>
-</div>
-
 <div id="flash"></div>
 
 <script>
@@ -319,37 +304,6 @@
     s2.classList.remove('active');
     s2.classList.add('exit');
     await sleep(600);
-
-    // SCENE 3
-    const s3 = document.getElementById('scene3');
-    s3.classList.add('active');
-
-    await sleep(500);
-    
-    // Animate terminal lines
-    const lines = [
-      { id: 'tl1', delay: 400 },
-      { id: 'tl2', delay: 600 },
-      { id: 'tl3', delay: 500 },
-      { id: 'tl4', delay: 700 }
-    ];
-    
-    for (let l of lines) {
-      const el = document.getElementById(l.id);
-      el.style.opacity = '1';
-      el.style.transform = 'translateX(0)';
-      el.style.transition = 'all 0.4s ease';
-      await sleep(l.delay);
-    }
-
-    // Fast progress bar
-    const pBar = document.getElementById('pBar');
-    pBar.style.width = '30%';
-    await sleep(400);
-    pBar.style.width = '70%';
-    await sleep(300);
-    pBar.style.width = '100%';
-    await sleep(200);
 
     // Flash & Redirect
     document.getElementById('flash').style.opacity = '1';
