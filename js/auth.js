@@ -37,7 +37,11 @@ function _doRenderGoogle() {
   
   const btn = document.getElementById('googleButtonContainer');
   const fallback = document.getElementById('googleFallbackBtn');
-  if (!btn) return;
+  if (!btn) {
+    // DOM not ready yet, retry
+    setTimeout(_doRenderGoogle, 100);
+    return;
+  }
 
   if (window.google && window.google.accounts && window.google.accounts.id) {
     try {
@@ -56,6 +60,9 @@ function _doRenderGoogle() {
       window.googleInitialized = false;
       console.error('Google SDK initialization failed:', e);
     }
+  } else {
+    // SDK loaded but object not fully hydrated yet, retry
+    setTimeout(_doRenderGoogle, 100);
   }
 }
 
