@@ -23,7 +23,12 @@ function showToast(message) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const token = localStorage.getItem('token');
-  let user = JSON.parse(localStorage.getItem('user'));
+  let user = null;
+  try {
+    user = JSON.parse(localStorage.getItem('user'));
+  } catch (e) {
+    console.error('Invalid user data');
+  }
 
   if (!token || !user) {
     window.location.href = 'index.html';

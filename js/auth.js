@@ -33,12 +33,15 @@ function handleGoogleLoginGlobal(response) {
 }
 
 function _doRenderGoogle() {
+  if (window.googleInitialized) return;
+  
   const btn = document.getElementById('googleButtonContainer');
   const fallback = document.getElementById('googleFallbackBtn');
   if (!btn) return;
 
-  if (window.google) {
+  if (window.google && window.google.accounts && window.google.accounts.id) {
     try {
+      window.googleInitialized = true;
       google.accounts.id.initialize({
         client_id: '428240791571-o7vohrjlnbctiu3k0ap60cpb19psvg3u.apps.googleusercontent.com',
         callback: handleGoogleLoginGlobal
@@ -47,15 +50,20 @@ function _doRenderGoogle() {
         theme: 'outline', size: 'large', width: 340,
         shape: 'pill', logo_alignment: 'center'
       });
+      if (fallback) fallback.style.display = 'none';
+      
       // Check if SDK actually rendered something
       setTimeout(() => {
         if (btn.children.length === 0 && fallback) {
           fallback.style.display = 'flex';
+          window.googleInitialized = false; // Reset if failed
         }
       }, 1000);
     } catch(e) {
       // SDK error - show fallback
       if (fallback) fallback.style.display = 'flex';
+      window.googleInitialized = false;
+      console.error(e);
     }
   } else {
     // No Google SDK - show fallback
@@ -86,6 +94,12 @@ window.initGoogle = function () {
   const init = () => {
     const panel = document.querySelector('.auth-panel');
     if (panel) {
+      // If page has been loading for more than 1 second, animation is likely done.
+      if (performance.now() > 1000) {
+        _doRenderGoogle();
+        return;
+      }
+      
       let animated = false;
       const render = () => {
         if (!animated) {
